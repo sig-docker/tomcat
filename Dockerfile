@@ -1,4 +1,4 @@
-FROM tomcat:8.5.54-jdk8-openjdk
+FROM tomcat:8.5.56-jdk8-openjdk
 
 RUN rm -Rf $CATALINA_HOME/webapps.dist \
  && apt-get update -y  \
