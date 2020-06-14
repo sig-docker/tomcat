@@ -1,3 +1,4 @@
+# https://hub.docker.com/_/tomcat
 FROM tomcat:8.5.56-jdk8-openjdk
 
 RUN rm -Rf $CATALINA_HOME/webapps.dist \
