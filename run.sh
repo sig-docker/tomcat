@@ -12,7 +12,12 @@ for F in /run.d/*; do
   . $F
 done
 
+if [ -z "$CENSOR_ANSIBLE_OUTPUT" ]; then
+  CENSOR_ANSIBLE_OUTPUT="yes"
+fi
+
 cat >/ansible/group_vars/all/tomcat_dynamic.yml <<EOF
+tomcat_censor_ansible_output: "$CENSOR_ANSIBLE_OUTPUT"
 tomcat_memory_args: "$TOMCAT_MEMORY_ARGS $TOMCAT_EXTRA_ARGS"
 tomcat_java_home: $JAVA_HOME
 EOF
