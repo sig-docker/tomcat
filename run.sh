@@ -85,6 +85,8 @@ build_tc_resources () {
 
 [ -z "$TOMCAT_MEMORY_ARGS" ] && die "TOMCAT_MEMORY_ARGS not defined"
 
+TOMCAT_DYNAMIC=/ansible/group_vars/all/tomcat_dynamic.yml
+
 for F in /run.d/*; do
   echo "Sourcing $F ..."
   . $F
@@ -96,11 +98,18 @@ fi
 
 build_tc_resources
 
-cat >/ansible/group_vars/all/tomcat_dynamic.yml <<EOF
+cat >$TOMCAT_DYNAMIC <<EOF
 tomcat_censor_ansible_output: "$CENSOR_ANSIBLE_OUTPUT"
 tomcat_memory_args: "$TOMCAT_MEMORY_ARGS $TOMCAT_EXTRA_ARGS"
 tomcat_java_home: $JAVA_HOME
 EOF
+
+if [ "$ENABLE_SSL" = 'yes' ]; then
+	cat >>$TOMCAT_DYNAMIC <<EOF
+tomcat_self_signed: yes
+tomcat_ssl_enabled: yes
+EOF
+fi
 
 cd /ansible || die "failed to cd to /ansible"
 ansible-playbook tomcat-playbook.yml -t tomcat_conf --extra-vars "tomcat_root=$CATALINA_HOME" || die "ansible error"
