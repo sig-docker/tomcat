@@ -104,6 +104,8 @@ tomcat_memory_args: "$TOMCAT_MEMORY_ARGS $TOMCAT_EXTRA_ARGS"
 tomcat_java_home: $JAVA_HOME
 tomcat_user: root
 tomcat_group: root
+tomcat_ssl_fqdn: docker-self-signed
+tomcat_ssl_org_name: docker-self-signed
 EOF
 
 if [ "$ENABLE_SSL" = 'yes' ]; then
