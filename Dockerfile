@@ -1,5 +1,5 @@
 # https://hub.docker.com/_/tomcat
-FROM tomcat:8.5.56-jdk8-openjdk
+FROM tomcat:8.5.61-jdk8-openjdk
 
 ENV APP_LOGS=/app_logs
 
