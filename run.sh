@@ -102,6 +102,8 @@ cat >$TOMCAT_DYNAMIC <<EOF
 tomcat_censor_ansible_output: "$CENSOR_ANSIBLE_OUTPUT"
 tomcat_memory_args: "$TOMCAT_MEMORY_ARGS $TOMCAT_EXTRA_ARGS"
 tomcat_java_home: $JAVA_HOME
+tomcat_user: root
+tomcat_group: root
 EOF
 
 if [ "$ENABLE_SSL" = 'yes' ]; then
