@@ -96,7 +96,9 @@ if [ -z "$CENSOR_ANSIBLE_OUTPUT" ]; then
   CENSOR_ANSIBLE_OUTPUT="yes"
 fi
 
-build_tc_resources
+# If Tomcat data sources have been specified in environment variables,
+# create the relevant Ansible group_vars files.
+env | grep -q '^TCDS_' && build_tc_resources
 
 cat >$TOMCAT_DYNAMIC <<EOF
 tomcat_censor_ansible_output: "$CENSOR_ANSIBLE_OUTPUT"
