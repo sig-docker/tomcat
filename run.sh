@@ -118,7 +118,7 @@ EOF
 fi
 
 cd /ansible || die "failed to cd to /ansible"
-ansible-playbook tomcat-playbook.yml -t tomcat_conf --extra-vars "tomcat_root=$CATALINA_HOME" || die "ansible error"
+ansible-playbook tomcat-playbook.yml -i inventory.ini -t tomcat_conf --extra-vars "tomcat_root=$CATALINA_HOME" || die "ansible error"
 
 cd $CATALINA_HOME || die "failed to cd to CATALINA_HOME ($CATALINA_HOME)"
 
