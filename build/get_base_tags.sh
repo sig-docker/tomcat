@@ -33,7 +33,7 @@ get_tomcat_tags () {
 		TOMCAT_INFO="$(curl -s -q ${HUB_BASE}/v2/repositories/library/tomcat/)"
 	fi
 
-	for tag in $(list_all_tags tomcat |grep '^[89]\.[0-9.]*-jdk8-openjdk$'); do
+	for tag in $(list_all_tags tomcat |grep '^[89]\.[0-9]*\.[0-9]*-jdk8-openjdk$'); do
 		echo "$TOMCAT_INFO" | grep -q "$tag" && echo $tag
 	done
 }
@@ -47,13 +47,22 @@ sig_tomcat_already_pushed () {
 	return $?
 }
 
-git_hash=$(current_git_hash)
-for base_tag in $(get_tomcat_tags); do	
-	hashed_tag="${base_tag}-${git_hash}"	
-	if sig_tomcat_already_pushed $hashed_tag; then
-		echo "$hashed_tag already exists"
-	else
-		echo "Building $hashed_tag"
-	fi
-done
+list_base_tags_to_build () {
+	git_hash=$(current_git_hash)
+	for base_tag in $(get_tomcat_tags); do	
+		hashed_tag="${base_tag}-${git_hash}"	
+		if ! sig_tomcat_already_pushed $hashed_tag; then
+			echo "${base_tag}"
+		fi
+	done	
+}
 
+to_build="$(list_base_tags_to_build)"
+echo -n "[ "
+is_first=y
+for base_tag in $to_build; do	
+	[ -z "$is_first" ] && echo -n ", "
+	echo -n "\"${base_tag}\""
+	unset is_first
+done
+echo " ]"
