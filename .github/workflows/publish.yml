@@ -18,6 +18,7 @@ jobs:
     
   build:
     needs: prep
+    if: ${{ contains(needs.prep.outputs.matrix, '"') }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
