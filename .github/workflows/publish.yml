@@ -1,10 +1,11 @@
 name: Publish to Docker Hub
 
 on:
-  push:
-    branches: [ master ]
-
   workflow_dispatch:
+    inputs:
+      baseTag:
+        description: tomcat tag for the FROM directive in the Dockerfile
+        required: true
 
 jobs:
   build:
@@ -12,6 +13,12 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v2
+        
+      - name: Update Dockerfile
+        run: sed -ie 's/^FROM .*/FROM tomcat:${{ github.event.inputs.baseTag }}/g' Dockerfile
+        
+      - name: Check Dockerfile
+        run: grep FROM Dockerfile
       
       - name: Docker Login
         uses: docker/login-action@v1.9.0
