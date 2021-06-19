@@ -2,14 +2,26 @@ name: Publish to Docker Hub
 
 on:
   workflow_dispatch:
-    inputs:
-      baseTag:
-        description: tomcat tag for the FROM directive in the Dockerfile
-        required: true
 
 jobs:
-  build:
+  prep:
     runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      
+      - name: Compute which base tags to build
+        id: set-matrix
+        run: echo "::set-output name=matrix::$(bash build/get_base_tags.sh)"
+    
+  build:
+    needs: prep
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        baseTag: ${{ fromJson(needs.prep.outputs.matrix) }}
     steps:
       - name: Check out code
         uses: actions/checkout@v2
@@ -19,7 +31,7 @@ jobs:
         run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
         
       - name: Update Dockerfile
-        run: sed -ie 's/^FROM .*/FROM tomcat:${{ github.event.inputs.baseTag }}/g' Dockerfile
+        run: sed -ie 's/^FROM .*/FROM tomcat:${{ matrix.baseTag }}/g' Dockerfile
         
       - name: Check Dockerfile
         run: grep FROM Dockerfile
@@ -35,6 +47,6 @@ jobs:
         with:
           push: true
           tags: |
-            sigcorp/tomcat:${{ github.event.inputs.baseTag }}
-            sigcorp/tomcat:${{ github.event.inputs.baseTag }}-${{ steps.shortSha.outputs.sha_short }}
-            sigcorp/tomcat:${{ github.event.inputs.baseTag }}-${{ github.run_number }}
+            sigcorp/tomcat:${{ matrix.baseTag }}
+            sigcorp/tomcat:${{ matrix.baseTag }}-${{ steps.shortSha.outputs.sha_short }}
+            sigcorp/tomcat:${{ matrix.baseTag }}-${{ github.run_number }}
