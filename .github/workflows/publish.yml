@@ -1,6 +1,8 @@
 name: Publish to Docker Hub
 
 on:
+  push:
+    branches: [ master ]
   schedule:
     - cron: '23 12 * * *'
   workflow_dispatch:
@@ -33,6 +35,10 @@ jobs:
         id: shortSha
         run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
         
+      - name: Get Tomcat major version
+        id: tcMajorVer
+        run: echo "::set-output name=major_ver::$(echo '${{ matrix.baseTag }}' |cut -d '.' -f 1)"
+        
       - name: Update Dockerfile
         run: sed -ie 's/^FROM .*/FROM tomcat:${{ matrix.baseTag }}/g' Dockerfile
         
@@ -53,3 +59,4 @@ jobs:
             sigcorp/tomcat:${{ matrix.baseTag }}
             sigcorp/tomcat:${{ matrix.baseTag }}-${{ steps.shortSha.outputs.sha_short }}
             sigcorp/tomcat:${{ matrix.baseTag }}-${{ github.run_number }}
+            sigcorp/tomcat:latest-${{ steps.tcMajorVer.outputs.major_ver }}
