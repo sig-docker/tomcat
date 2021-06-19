@@ -8,4 +8,7 @@ on:
 
 jobs:
   build:
-    docker build -t sig-tomcat .
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build the image
+        run: docker build -t sig-tomcat .
