@@ -14,6 +14,10 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
         
+      - name: Get short commit hash
+        id: shortSha
+        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+        
       - name: Update Dockerfile
         run: sed -ie 's/^FROM .*/FROM tomcat:${{ github.event.inputs.baseTag }}/g' Dockerfile
         
@@ -30,4 +34,6 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: sigcorp/tomcat:latest
+          tags: |
+            sigcorp/tomcat:${{ github.event.inputs.baseTag }}-${{ steps.shortSha.outputs.sha_short }}
+            sigcorp/tomcat:${{ github.event.inputs.baseTag }}-${{ steps.shortSha.outputs.sha_short }}-${{ env.GITHUB_RUN_NUMBER }}
