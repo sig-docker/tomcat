@@ -1,0 +1,11 @@
+name: Publish to Docker Hub
+
+on:
+  push:
+    branches: [ master ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    docker build -t sig-tomcat .
