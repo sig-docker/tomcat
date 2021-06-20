@@ -8,8 +8,9 @@ RUN rm -Rf $CATALINA_HOME/webapps.dist \
  && apt-get update -y  \
  && apt-get remove -y build-essential mercurial git openssh-client \
  && apt-get upgrade -y \
- && apt-get install -y python-pip xtail \
- && pip install ansible==2.9.2 lxml \
+ && apt-get install -y python3-pip xtail \
+ && pip3 install ansible==2.9.2 lxml \
+ && apt-get remove -y python3-pip \
  && apt-get clean autoclean -y \
  && apt-get autoremove -y \
  && rm -rf /var/lib/apt/lists/* /root/.cache/pip/*
