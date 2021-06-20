@@ -1,0 +1,36 @@
+---
+general:
+  vulnerabilities:
+    # The following vulnerabilities are accepted as they are part of the
+    # compialtion chain and not used during runtime.
+    - CVE-2018-12886
+    - CVE-2019-15847
+    - CVE-2021-33574
+    - CVE-2020-1752
+    - CVE-2021-3326
+
+    # This specific to PPC which we don't build for. 
+    - CVE-2020-1751
+    
+    # These issues affects tools like apt, curl and wget. Should not affect
+    # runtime operations.
+    - CVE-2019-12290
+    - CVE-2019-20454
+
+    # SQLite is installed to support OS utilities and is not used at runtime.
+    - CVE-2019-19603
+
+    # libssh is required for curl, but is not used at runtime.
+    - CVE-2019-13115
+
+    # Systemd is part of the base image but is not used at runtime
+    - CVE-2019-3843
+    - CVE-2019-3844
+
+    # These issues are related to Python which is used in by Ansible at startup
+    # for Tomcat configuration. It does not process user input or interact with
+    # the network.
+    #
+    - CVE-2020-36242
+    - CVE-2020-29651
+    - CVE-2021-33503
