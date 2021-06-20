@@ -6,6 +6,8 @@ ENV APP_LOGS=/app_logs
 RUN rm -Rf $CATALINA_HOME/webapps.dist \
  && mkdir -p $APP_LOGS \
  && apt-get update -y  \
+ && apt-get remove -y build-essential mercurial git openssh-client \
+ && apt-get upgrade -y \
  && apt-get install -y python-pip xtail \
  && pip install ansible==2.9.2 lxml \
  && apt-get clean autoclean -y \
