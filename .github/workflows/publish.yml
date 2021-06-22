@@ -59,11 +59,14 @@ jobs:
         with:
           context: .
           tags: sigcorp/tomcat:${{ matrix.baseTag }}-${{ steps.shortSha.outputs.sha_short }}
-          
-      - name: Scan for vulnerabilities
-        uses: azure/container-scan@v0
-        with:
-          image-name: sigcorp/tomcat:${{ matrix.baseTag }}-${{ steps.shortSha.outputs.sha_short }}
+
+      # TODO: I think we want to switch to scanning inside Docker Hub instead
+      #       because that'll allow us to also monitor new vulnerabilities in
+      #       old images.          
+      # - name: Scan for vulnerabilities
+      #   uses: azure/container-scan@v0
+      #   with:
+      #     image-name: sigcorp/tomcat:${{ matrix.baseTag }}-${{ steps.shortSha.outputs.sha_short }}
 
       - name: Push to Docker Hub
         if: ${{ github.ref == 'refs/heads/master' }}
