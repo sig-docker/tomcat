@@ -37,6 +37,10 @@ jobs:
       - name: Get Tomcat major version
         id: tcMajorVer
         run: echo "::set-output name=major_ver::$(echo '${{ matrix.baseTag }}' |cut -d '.' -f 1)"
+
+      - name: Get Tomcat JDK version
+        id: tcJdkVer
+        run: echo "::set-output name=jdk_ver::$(echo '${{ matrix.baseTag }}' |cut -d - -f 2)"
         
       - name: Update Dockerfile
         run: sed -ie 's/^FROM .*/FROM tomcat:${{ matrix.baseTag }}/g' Dockerfile
@@ -71,4 +75,4 @@ jobs:
             sigcorp/tomcat:${{ matrix.baseTag }}
             sigcorp/tomcat:${{ matrix.baseTag }}-${{ steps.shortSha.outputs.sha_short }}
             sigcorp/tomcat:${{ matrix.baseTag }}-${{ github.run_number }}
-            sigcorp/tomcat:latest-${{ steps.tcMajorVer.outputs.major_ver }}
+            sigcorp/tomcat:latest-${{ steps.tcMajorVer.outputs.major_ver }}-${{ steps.tcJdkVer.outputs.jdk_ver }}

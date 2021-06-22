@@ -33,7 +33,7 @@ get_tomcat_tags () {
 		TOMCAT_INFO="$(curl -s -q ${HUB_BASE}/v2/repositories/library/tomcat/)"
 	fi
 
-	for tag in $(list_all_tags tomcat |grep '^[^7][0-9]*\.[0-9]*\.[0-9]*-jdk8-openjdk$'); do
+	for tag in $(list_all_tags tomcat |grep -E '^[^7][0-9]*\.[0-9]*\.[0-9]*-jdk(8|11)-openjdk$'); do
 		echo "$TOMCAT_INFO" | grep -q "$tag" && echo $tag
 	done
 }
