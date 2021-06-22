@@ -21,11 +21,19 @@ with launch-time parameterization including:
   set this to `no` to log what is being configured.
   * `yes` - _default_ - Prevent secrets appearing in log output
   * `no` - Log values during JNDI setup
+  * **Important Note:** This value must be passed as a *string* as it appears 
+    here. If you are using a YAML-based deployment syntax (as with Sceptre) you
+    will need to quote the value to prevent the YAML interpreter seeing it as a
+    boolean.
 
 * `ENABLE_SSL` - When `yes` a self-signed certificate will be generated and the
   SSL listener will be available on port 8443.
   * `yes` - Generate a self-signed certificate and listen for HTTPS on 8443
   * `no` - _default_ - Disable SSL/HTTPS support
+  * **Important Note:** This value must be passed as a *string* as it appears 
+    here. If you are using a YAML-based deployment syntax (as with Sceptre) you
+    will need to quote the value to prevent the YAML interpreter seeing it as a
+    boolean.
 
 * `TOMCAT_EXTRA_ARGS` - Extra command-line arguments for the Tomcat process.
   * Example: `TOMCAT_EXTRA_ARGS='-Duser.timezone=America/Chicago'`
