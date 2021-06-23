@@ -39,8 +39,8 @@ with launch-time parameterization including:
   * Example: `TOMCAT_EXTRA_ARGS='-Duser.timezone=America/Chicago'`
 
 * `TOMCAT_SSL_FQDN` - If specified along with `ENABLE_SSL='yes'` this value will
-  be used to set the hostname on the self-signed certificate. By if unspecified
-  the hostname of the container will be used.
+  be used to set the hostname on the self-signed certificate.
+  * _default_ - `docker-self-signed`
 
 ### Specifying Data Sources
 

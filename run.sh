@@ -96,6 +96,8 @@ if [ -z "$CENSOR_ANSIBLE_OUTPUT" ]; then
   CENSOR_ANSIBLE_OUTPUT="yes"
 fi
 
+[ -z "$TOMCAT_SSL_FQDN" ] && TOMCAT_SSL_FQDN='docker-self-signed'
+
 # If Tomcat data sources have been specified in environment variables,
 # create the relevant Ansible group_vars files.
 env | grep -q '^TCDS_' && build_tc_resources
@@ -106,7 +108,7 @@ tomcat_memory_args: "$TOMCAT_MEMORY_ARGS $TOMCAT_EXTRA_ARGS"
 tomcat_java_home: $JAVA_HOME
 tomcat_user: root
 tomcat_group: root
-tomcat_ssl_fqdn: docker-self-signed
+tomcat_ssl_fqdn: ${TOMCAT_SSL_FQDN}
 tomcat_ssl_org_name: docker-self-signed
 EOF
 
@@ -114,12 +116,6 @@ if [ "$ENABLE_SSL" = 'yes' ]; then
 	cat >>$TOMCAT_DYNAMIC <<EOF
 tomcat_self_signed: yes
 tomcat_ssl_enabled: yes
-EOF
-fi
-
-if [ -n "$TOMCAT_SSL_FQDN" ]; then
-	cat >>$TOMCAT_DYNAMIC <<EOF
-tomcat_ssl_fqdn: '$TOMCAT_SSL_FQDN'
 EOF
 fi
 
