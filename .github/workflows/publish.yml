@@ -27,8 +27,8 @@ jobs:
       matrix:
         baseTag: ${{ fromJson(needs.prep.outputs.matrix) }}
     outputs:
-      matrix: ${{ matrix }}
-      steps: ${{ steps }}
+      matrix: ${{ toJson(matrix) }}
+      steps: ${{ toJson(steps) }}
     steps:
       - name: Check out code
         uses: actions/checkout@v2
