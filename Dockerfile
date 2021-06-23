@@ -7,8 +7,8 @@ RUN rm -Rf $CATALINA_HOME/webapps.dist \
  && mkdir -p $APP_LOGS \
  && apt-get update -y  \
  && apt-get upgrade -y \
- && apt-get install -y python3 python3-pip xtail \
- && pip3 install ansible==2.10.7 cryptography>=1.2.3 PyOpenSSL>=0.6 lxml \
+ && apt-get install -y python-pip xtail \
+ && pip install ansible==2.10.7 lxml \
  && apt-get remove -y build-essential subversion mercurial git openssh-client \
  && apt-get clean autoclean -y \
  && apt-get autoremove -y \
