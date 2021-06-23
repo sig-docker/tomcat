@@ -120,8 +120,13 @@ fi
 cd /ansible || die "failed to cd to /ansible"
 ansible-playbook tomcat-playbook.yml -i inventory.ini -t tomcat_conf --extra-vars "tomcat_root=$CATALINA_HOME" || die "ansible error"
 
-cd $CATALINA_HOME || die "failed to cd to CATALINA_HOME ($CATALINA_HOME)"
 
-xtail ${APP_LOGS} &
+if [ -z "$TEST_CONF_ONLY" ]; then
+	cd $CATALINA_HOME || die "failed to cd to CATALINA_HOME ($CATALINA_HOME)"
+ 
+  xtail ${APP_LOGS} &
 
-[ -z "$TEST_CONF_ONLY" ] && bin/catalina.sh run
+	bin/catalina.sh run
+else
+	echo "Configuration test succeeded."	
+fi
