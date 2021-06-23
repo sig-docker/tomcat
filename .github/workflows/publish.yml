@@ -62,7 +62,7 @@ jobs:
 
       - name: Test startup configuration
         run: |
-          docker run -ti --rm \
+          docker run --rm \
             -e TOMCAT_MEMORY_ARGS='-Xms1024m -Xmx2048m' \
             -e TCDS_BP_JDBC_URL='jdbc:oracle:thin:@db.school.edu:1521:PROD' \
             -e TCDS_BP_USER='banproxy' \
