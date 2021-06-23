@@ -60,17 +60,17 @@ jobs:
           context: .
           tags: sigcorp/tomcat:${{ matrix.baseTag }}-${{ steps.shortSha.outputs.sha_short }}
 
-      - name: Test startup configuration
-        run: |
-          docker run --rm \
-            -e TOMCAT_MEMORY_ARGS='-Xms1024m -Xmx2048m' \
-            -e TCDS_BP_JDBC_URL='jdbc:oracle:thin:@db.school.edu:1521:PROD' \
-            -e TCDS_BP_USER='banproxy' \
-            -e TCDS_BP_JNDI_NAME='jdbc/bannerDataSource' \
-            -e TCDS_BP_PASSWORD='super_secret' \
-            -e CENSOR_ANSIBLE_OUTPUT='no' \
-            -e TEST_CONF_ONLY='y'  \
-            sigcorp/tomcat:${{ matrix.baseTag }}-${{ steps.shortSha.outputs.sha_short }}
+      # - name: Test startup configuration
+      #   run: |
+      #     docker run --rm \
+      #       -e TOMCAT_MEMORY_ARGS='-Xms1024m -Xmx2048m' \
+      #       -e TCDS_BP_JDBC_URL='jdbc:oracle:thin:@db.school.edu:1521:PROD' \
+      #       -e TCDS_BP_USER='banproxy' \
+      #       -e TCDS_BP_JNDI_NAME='jdbc/bannerDataSource' \
+      #       -e TCDS_BP_PASSWORD='super_secret' \
+      #       -e CENSOR_ANSIBLE_OUTPUT='no' \
+      #       -e TEST_CONF_ONLY='y'  \
+      #       sigcorp/tomcat:${{ matrix.baseTag }}-${{ steps.shortSha.outputs.sha_short }}
 
       # TODO: I think we want to switch to scanning inside Docker Hub instead
       #       because that'll allow us to also monitor new vulnerabilities in
