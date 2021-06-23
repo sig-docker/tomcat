@@ -26,6 +26,9 @@ jobs:
     strategy:
       matrix:
         baseTag: ${{ fromJson(needs.prep.outputs.matrix) }}
+    outputs:
+      matrix: ${{ matrix }}
+      steps: ${{ steps }}
     steps:
       - name: Check out code
         uses: actions/checkout@v2
@@ -108,6 +111,10 @@ jobs:
         env:
           STEPS_CONTEXT: ${{ toJSON(steps) }}
         run: echo "$STEPS_CONTEXT"
+      - name: Dump needs context
+        env:
+          NEEDS_CONTEXT: ${{ toJSON(needs) }}
+        run: echo "$NEEDS_CONTEXT"
       - name: Dump runner context
         env:
           RUNNER_CONTEXT: ${{ toJSON(runner) }}
