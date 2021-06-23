@@ -69,6 +69,7 @@ jobs:
             -e TCDS_BP_JNDI_NAME='jdbc/bannerDataSource' \
             -e TCDS_BP_PASSWORD='super_secret' \
             -e CENSOR_ANSIBLE_OUTPUT='no' \
+            -e ENABLE_SSL='yes' \
             -e TEST_CONF_ONLY='y'  \
             sigcorp/tomcat:${{ matrix.baseTag }}-${{ steps.shortSha.outputs.sha_short }}
 
