@@ -91,3 +91,10 @@ jobs:
             sigcorp/tomcat:${{ matrix.baseTag }}-${{ steps.shortSha.outputs.sha_short }}
             sigcorp/tomcat:${{ matrix.baseTag }}-${{ github.run_number }}
             sigcorp/tomcat:latest-${{ steps.tcMajorVer.outputs.major_ver }}-${{ steps.tcJdkVer.outputs.jdk_ver }}
+
+  docs:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Gen docs
+        run: echo "Doing something"
