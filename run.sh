@@ -124,4 +124,4 @@ cd $CATALINA_HOME || die "failed to cd to CATALINA_HOME ($CATALINA_HOME)"
 
 xtail ${APP_LOGS} &
 
-bin/catalina.sh run
+[ -z "$TEST_CONF_ONLY" ] && bin/catalina.sh run
