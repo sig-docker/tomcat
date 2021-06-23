@@ -117,6 +117,12 @@ tomcat_ssl_enabled: yes
 EOF
 fi
 
+if [ -n "$TOMCAT_SSL_FQDN" ]; then
+	cat >>$TOMCAT_DYNAMIC <<EOF
+tomcat_ssl_fqdn: '$TOMCAT_SSL_FQDN'
+EOF
+fi
+
 cd /ansible || die "failed to cd to /ansible"
 ansible-playbook tomcat-playbook.yml -i inventory.ini -t tomcat_conf --extra-vars "tomcat_root=$CATALINA_HOME" || die "ansible error"
 

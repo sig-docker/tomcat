@@ -38,6 +38,10 @@ with launch-time parameterization including:
 * `TOMCAT_EXTRA_ARGS` - Extra command-line arguments for the Tomcat process.
   * Example: `TOMCAT_EXTRA_ARGS='-Duser.timezone=America/Chicago'`
 
+* `TOMCAT_SSL_FQDN` - If specified along with `ENABLE_SSL='yes'` this value will
+  be used to set the hostname on the self-signed certificate. By if unspecified
+  the hostname of the container will be used.
+
 ### Specifying Data Sources
 
 JNDI data sources are specified using variables prefixed with `TCDS_` and 
