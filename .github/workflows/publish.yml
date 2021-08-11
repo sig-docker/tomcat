@@ -81,18 +81,6 @@ jobs:
       #   with:
       #     image-name: sigcorp/tomcat:${{ matrix.baseTag }}-${{ steps.shortSha.outputs.sha_short }}
 
-      - name: Push to Docker Hub
-        if: ${{ github.ref == 'refs/heads/master' }}
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          push: true
-          tags: |
-            sigcorp/tomcat:${{ matrix.baseTag }}
-            sigcorp/tomcat:${{ matrix.baseTag }}-${{ steps.shortSha.outputs.sha_short }}
-            sigcorp/tomcat:${{ matrix.baseTag }}-${{ github.run_number }}
-            sigcorp/tomcat:latest-${{ steps.tcMajorVer.outputs.major_ver }}-${{ steps.tcJdkVer.outputs.jdk_ver }}
-
       - name: Configure AWS credentials
         if: ${{ github.ref == 'refs/heads/master' }}
         uses: aws-actions/configure-aws-credentials@v1
@@ -116,3 +104,16 @@ jobs:
             public.ecr.aws/i5k1f9l3/sig-tomcat:${{ matrix.baseTag }}-${{ steps.shortSha.outputs.sha_short }}
             public.ecr.aws/i5k1f9l3/sig-tomcat:${{ matrix.baseTag }}-${{ github.run_number }}
             public.ecr.aws/i5k1f9l3/sig-tomcat:latest-${{ steps.tcMajorVer.outputs.major_ver }}-${{ steps.tcJdkVer.outputs.jdk_ver }}
+
+      - name: Push to Docker Hub
+        if: ${{ github.ref == 'refs/heads/master' }}
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: |
+            sigcorp/tomcat:${{ matrix.baseTag }}
+            sigcorp/tomcat:${{ matrix.baseTag }}-${{ steps.shortSha.outputs.sha_short }}
+            sigcorp/tomcat:${{ matrix.baseTag }}-${{ github.run_number }}
+            sigcorp/tomcat:latest-${{ steps.tcMajorVer.outputs.major_ver }}-${{ steps.tcJdkVer.outputs.jdk_ver }}
+
