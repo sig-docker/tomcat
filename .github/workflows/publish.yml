@@ -103,8 +103,7 @@ jobs:
 
       - name: Login to Amazon ECR
         if: ${{ github.ref == 'refs/heads/master' }}
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
+        run: aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/i5k1f9l3
 
       - name: Push to Docker AWS ECR
         if: ${{ github.ref == 'refs/heads/master' }}
