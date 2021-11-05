@@ -55,6 +55,7 @@ TCDS_BP_JDBC_URL='jdbc:oracle:thin:@db.school.edu:1521:PROD'
 TCDS_BP_USER='banproxy'
 TCDS_BP_JNDI_NAME='jdbc/bannerDataSource'
 TCDS_BP_PASSWORD='super_secret'
+TCDS_BP_ATTR_maxTotal=800
 ```
 
 **NB:** The prefix (`BP` in the example above) has no functional meaning and is
@@ -73,6 +74,30 @@ only used to group the arguments.
   * _default_: `oracle.jdbc.OracleDriver`
 * `JNDI_LINK_NAME` - Name assigned to the JNDI link
   * _default_: Same as `JNDI_NAME`
+  
+#### Extended Attributes
+
+Beyond the basic data source arguments, you can provide any arbitrary argument
+by prefixing with `ATTR_` For example, to set `maxTotal` in the `BP` data
+source:
+
+```
+TCDS_BP_ATTR_maxTotal=800
+```
+
+The following attribute defaults are provided:
+
+* `initialSize`: `25`
+* `maxIdle`: `10`
+* `maxTotal`: `400`
+* `maxWaitMillis`: `30000`
+* `minIdle`: `10`
+* `timeBetweenEvictionRunsMillis`: `1800000`
+* `testOnBorrow`: `true`
+* `testWhileIdle`: `true`
+* `accessToUnderlyingConnectionAllowed`: `true`
+* `validationQuery`: `select * from dual`
+* `validationQueryTimeout`: `300`
 
 ## Links
 
