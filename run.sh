@@ -27,6 +27,13 @@ requiredsnvar () {
 	fi
 }
 
+setdsnattr () {
+  val=$(eval echo \$TCDS_${DSN}_ATTR_${1})
+  if [ -z "$val" ]; then
+    export TCDS_${DSN}_ATTR_${1}="$2"
+  fi
+}
+
 printdsnresource () {
 	cat <<EOF
   - name: $JNDI_NAME
@@ -37,19 +44,9 @@ printdsnresource () {
       username: $USER
       password: "$PASSWORD"
       driverClassName: $DRIVER_CLASS
-      initialSize: 25
-      maxIdle: 10
-      maxTotal: 400
-      maxWaitMillis: 30000
-      minIdle: 10
-      timeBetweenEvictionRunsMillis: 1800000
-      testOnBorrow: true
-      testWhileIdle: true
-      accessToUnderlyingConnectionAllowed: true
-      validationQuery: select * from dual
-      validationQueryTimeout: 300
-
 EOF
+  env |gawk -v dsn=$DSN 'match($0,"^TCDS_" dsn "_ATTR_([A-Za-z0-9_]+)=(.*)",a){print "      " a[1] ": " a[2]}'
+  echo
 }
 
 printdsnlink () {
@@ -77,6 +74,18 @@ build_tc_resources () {
 		requiredsnvar PASSWORD
 		requiredsnvar DRIVER_CLASS "oracle.jdbc.OracleDriver"
 		requiredsnvar JNDI_LINK_NAME "$JNDI_NAME"
+
+    setdsnattr initialSize 25
+    setdsnattr maxIdle 10
+    setdsnattr maxTotal 400
+    setdsnattr maxWaitMillis 30000
+    setdsnattr minIdle 10
+    setdsnattr timeBetweenEvictionRunsMillis 1800000
+    setdsnattr testOnBorrow true
+    setdsnattr testWhileIdle true
+    setdsnattr accessToUnderlyingConnectionAllowed true
+    setdsnattr validationQuery "select * from dual"
+    setdsnattr validationQueryTimeout 300
 
 		printdsnresource >>$resfile
 		printdsnlink >>$linkfile
