@@ -27,14 +27,29 @@ list_all_tags () {
 	fetch_tags $1 | sed -e 's/[][]//g' -e 's/"//g' -e 's/ //g' | tr '}' '\n'  | awk -F: '{print $3}'
 }
 
-get_tomcat_tags () {
-	if [ -z "$TOMCAT_INFO" ]; then
-		>&2 echo "Fetching Tomcat info from registry."
-		TOMCAT_INFO="$(curl -s -q ${HUB_BASE}/v2/repositories/library/tomcat/)"
-	fi
+# get_tomcat_tags () {
+# 	if [ -z "$TOMCAT_INFO" ]; then
+# 		>&2 echo "Fetching Tomcat info from registry."
+# 		TOMCAT_INFO="$(curl -s -q ${HUB_BASE}/v2/repositories/library/tomcat/)"
+# 	fi
 
-	for tag in $(list_all_tags tomcat |grep -E '^[^7][0-9]*\.[0-9]*\.[0-9]*-jdk(8|11)-openjdk$'); do
-		echo "$TOMCAT_INFO" | grep -q "$tag" && echo $tag
+# 	for tag in $(list_all_tags tomcat |grep -E '^[^7][0-9]*\.[0-9]*\.[0-9]*-jdk(8|11)-openjdk$'); do
+# 		echo "$TOMCAT_INFO" | grep -q "$tag" && echo $tag
+# 	done
+# }
+
+get_all_tomcat_tags () {
+	list_all_tags tomcat |grep -E '^[^7][0-9]*\.[0-9]*\.[0-9]*-jdk(8|11)-openjdk$'
+}
+
+get_tomcat_tags () {
+	for minor in $(get_all_tomcat_tags |cut -d . -f 1,2 |uniq); do
+		MX=$(echo $minor |sed -e 's/\./\\./')
+		version=$(get_all_tomcat_tags |grep "^$MX" |cut -d - -f 1 |sort -t . -k 3 -n |tail -n 1)
+		for jdk in $(get_all_tomcat_tags t |cut -d - -f 2,3 |sort -u); do
+			tag="$version-$jdk"
+			get_all_tomcat_tags |grep "^$(echo $tag |sed -e 's/\./\\./')$"
+		done
 	done
 }
 
