@@ -99,6 +99,15 @@ The following attribute defaults are provided:
 * `validationQuery`: `select * from dual`
 * `validationQueryTimeout`: `300`
 
+### Extra Connection Attributes
+
+Additional attributes may be added to the HTTP and HTTPS `Connector` tags in
+`server.xml` by prefixing them with `CONNATTR_`. For example:
+
+```
+CONNATTR_relaxedQueryChars="|{}[]:"
+```
+
 ## Links
 
 * [Official releases on Docker Hub](https://hub.docker.com/r/sigcorp/tomcat)
