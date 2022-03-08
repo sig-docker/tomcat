@@ -8,7 +8,7 @@ RUN rm -Rf $CATALINA_HOME/webapps.dist \
  && apt-get update -y  \
  && apt-get upgrade -y \
  && apt-get install -y python3-pip xtail gawk \
- && pip install ansible==2.10.7 lxml \
+ && pip3 install ansible==2.10.7 lxml \
  && apt-get remove -y build-essential subversion mercurial git openssh-client \
  && apt-get clean autoclean -y \
  && apt-get autoremove -y \
@@ -20,7 +20,7 @@ RUN mkdir -p /run.d \
  && mkdir -p galaxy \
  && ansible-galaxy install --roles-path galaxy -r tomcat-requirements.yml --force
 
-COPY run.sh /run.sh
+COPY parse_env.py run.sh /
 
 EXPOSE 8080
 CMD /run.sh
