@@ -18,6 +18,11 @@ done
 
 python3 /parse_env.py $TOMCAT_DYNAMIC
 
+cd ${CATALINA_HOME}/lib
+for url in $TOMCAT_DOWNLOAD_LIBS; do
+  wget "$url" ||die "download error"
+done
+
 cd /ansible || die "failed to cd to /ansible"
 ansible-playbook tomcat-playbook.yml -i inventory.ini -t tomcat_conf --extra-vars "tomcat_root=$CATALINA_HOME" || die "ansible error"
 

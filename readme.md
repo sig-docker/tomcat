@@ -34,6 +34,9 @@ with launch-time parameterization including:
     here. If you are using a YAML-based deployment syntax (as with Sceptre) you
     will need to quote the value to prevent the YAML interpreter seeing it as a
     boolean.
+    
+* `TOMCAT_DOWNLOAD_LIBS` - A space- or comma-separated list of URLS to download
+  into `$CATALINA_HOME/lib`. This is useful for adding JDBC dependencies.
 
 * `TOMCAT_EXTRA_ARGS` - Extra command-line arguments for the Tomcat process.
   * Example: `TOMCAT_EXTRA_ARGS='-Duser.timezone=America/Chicago'`
