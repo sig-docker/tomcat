@@ -368,3 +368,6 @@ accept:
     reason: |
       Medium severity, no fix available from Debian.
       https://security-tracker.debian.org/tracker/CVE-2021-31879
+
+  - id: SNYK-JAVA-ORGAPACHETOMCAT-2813806
+    reason: This is a documentation issue, not a vulnerability.

@@ -26,6 +26,8 @@ jobs:
     strategy:
       matrix:
         baseTag: ${{ fromJson(needs.prep.outputs.matrix) }}
+        exclude:
+          - baseTag: 10.1.0-jdk11-openjdk   # Critical vulnerability
     steps:
       - name: Install docker scan plugin
         run: |
