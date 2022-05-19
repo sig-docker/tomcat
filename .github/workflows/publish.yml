@@ -24,6 +24,7 @@ jobs:
     if: ${{ contains(needs.prep.outputs.matrix, '"') }}
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         baseTag: ${{ fromJson(needs.prep.outputs.matrix) }}
         exclude:
