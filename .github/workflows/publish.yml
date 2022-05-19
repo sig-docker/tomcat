@@ -27,8 +27,11 @@ jobs:
       matrix:
         baseTag: ${{ fromJson(needs.prep.outputs.matrix) }}
     steps:
-      - name: Install prerequisites
-        run: sudo apt-get update && sudo apt-get install docker-scan-plugin
+      - name: Install docker scan plugin
+        run: |
+          mkdir -p ~/.docker/cli-plugins && \
+          curl https://github.com/docker/scan-cli-plugin/releases/latest/download/docker-scan_linux_amd64 -L -s -S -o ~/.docker/cli-plugins/docker-scan && \
+          chmod +x ~/.docker/cli-plugins/docker-scan
 
       - name: Check out code
         uses: actions/checkout@v2
