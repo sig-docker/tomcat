@@ -33,6 +33,9 @@ jobs:
           curl https://github.com/docker/scan-cli-plugin/releases/latest/download/docker-scan_linux_amd64 -L -s -S -o ~/.docker/cli-plugins/docker-scan && \
           chmod +x ~/.docker/cli-plugins/docker-scan
 
+      - name: Install pip packages
+        run: pip3 install pydantic
+
       - name: Check out code
         uses: actions/checkout@v2
         
