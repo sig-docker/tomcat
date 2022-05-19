@@ -7,7 +7,7 @@ import datetime
 
 from pydantic import BaseModel
 from typing import List, Optional
-from functools import cache
+from functools import lru_cache
 
 
 class AcceptModel(BaseModel):
@@ -20,7 +20,7 @@ class ConfigModel(BaseModel):
     accept: List[AcceptModel]
 
 
-@cache
+@lru_cache
 def config_accepts_vuln_id(id):
     global config
     accepts = [a for a in config.accept if a.id == id]
