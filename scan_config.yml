@@ -1,0 +1,370 @@
+---
+accept:
+  - id: SNYK-DEBIAN11-APT-522585
+    reason: Not exploitable in Debian
+
+  - id: SNYK-DEBIAN11-COREUTILS-514776
+    reason: |
+      This CVE has a low severity, would require another RCE to exploit, and
+      Debian has opted not to address it.
+      https://security-tracker.debian.org/tracker/CVE-2016-2781
+
+  - id: SNYK-DEBIAN11-COREUTILS-527269
+    reason: |
+      This CVE has a low severity, would require another RCE to exploit, and
+      Debian has not released a fix.
+      https://security-tracker.debian.org/tracker/CVE-2017-18018
+
+  - id: SNYK-DEBIAN11-CURL-1296884
+    reason: Low severity and does not apply to our use case.
+
+  - id: SNYK-DEBIAN11-CURL-1322658
+    reason: Low severity and only applies to case-insensitive filesystems.
+
+  - id: SNYK-DEBIAN11-CURL-1585138
+    reason: Low severity and does not apply to our use case.
+
+  - id: SNYK-DEBIAN11-CURL-1585148
+    reason: Low severity and does not apply to our use case.
+
+  - id: SNYK-DEBIAN11-CURL-1585150
+    reason: Low severity and does not apply to our use case.
+
+  - id: SNYK-DEBIAN11-E2FSPROGS-2628459
+    reason: Low severity and does not apply to our use case.
+
+  - id: SNYK-DEBIAN11-FREETYPE-2774654
+    until: 2022-06-22
+    reason: |
+      This one is unlikely to apply to our use case and Ubuntu has not yet
+      released a fix. Will check again later.
+      https://ubuntu.com/security/CVE-2022-27406
+
+  - id: SNYK-DEBIAN11-FREETYPE-2774656
+    until: 2022-06-22
+    reason: |
+      This one is unlikely to apply to our use case and Ubuntu has not yet
+      released a fix. Will check again later.
+      https://ubuntu.com/security/CVE-2022-27406
+
+  - id: SNYK-DEBIAN11-CURL-2813773
+    reason: Low severity and does not apply to our use case.
+
+  - id: SNYK-DEBIAN11-FREETYPE-2774664
+    until: 2022-08-18
+    reason: |
+      Low severity, probably out-of-scope for our use case, and Ubuntu has not
+      yet released a fix.
+      https://ubuntu.com/security/CVE-2022-27405
+
+  - id: SNYK-DEBIAN11-GIT-2399903
+    reason: This is an issue with the Git documentation. Not relevant here.
+
+  - id: SNYK-DEBIAN11-GIT-2635965
+    reason: Only applies to multi-user Windows machines.
+
+  - id: SNYK-DEBIAN11-GIT-514769
+    until: 2022-08-18
+    reason: |
+      Low severity, probably out-of-scope for our use case, and Ubuntu has not
+      yet released a fix.
+      https://ubuntu.com/security/CVE-2018-1000021
+
+  - id: SNYK-DEBIAN11-DB53-2825168
+    until: 2022-08-18
+    reason: |
+      Medium severity, heap out-of-bounds read in SQLite3 (used by db5.3
+      package). Should not be exploitable without another RCE. Fix released for
+      Debian "sid". We'll accept this one for a few months and update the base
+      image when possible.
+      https://security-tracker.debian.org/tracker/CVE-2019-8457
+
+  - id: SNYK-DEBIAN11-EXPAT-524217
+    until: 2022-08-18
+    reason: |
+      Medium severity, improper entity expansion in expat. Fixed in Debian
+      "bookwork" and "sid". This library is used by Python which is only used at
+      startup time for configuration and should therefore not be exploitable
+      from the outside. Tomcat and its hosted apps are Java-based and will not
+      use this library.
+      https://security-tracker.debian.org/tracker/CVE-2013-0340
+
+  - id: SNYK-DEBIAN11-GLIBC-2340919
+    until: 2022-08-18
+    reason: |
+      Medium severity, buffer over/underflow in glibc. Fixed in Debian "bookwork"
+      and "sid".
+      https://security-tracker.debian.org/tracker/CVE-2021-3999
+
+  - id: SNYK-DEBIAN11-GLIBC-521063
+    reason: |
+      Low severity, disputed by package authors, and no fix planed from Debian.
+      https://security-tracker.debian.org/tracker/CVE-2019-1010022
+
+  - id: SNYK-DEBIAN11-GLIBC-521199
+    reason: |
+      Low severity, disputed by package authors, and no fix planed from Debian.
+      https://security-tracker.debian.org/tracker/CVE-2019-9192
+
+  - id: SNYK-DEBIAN11-GLIBC-522385
+    reason: |
+      Low severity, disputed by package authors, and no fix planed from Debian.
+      https://security-tracker.debian.org/tracker/CVE-2019-1010025
+
+  - id: SNYK-DEBIAN11-GLIBC-529848
+    reason: |
+      Low severity, disputed by package authors, and no fix planed from Debian.
+      https://security-tracker.debian.org/tracker/CVE-2019-1010024
+
+  - id: SNYK-DEBIAN11-GLIBC-531451
+    reason: |
+      Low severity, disputed by package authors, and no fix planed from Debian.
+      https://security-tracker.debian.org/tracker/CVE-2019-1010023
+
+  - id: SNYK-DEBIAN11-GLIBC-531492
+    reason: |
+      The package authors don't consider this to be a security risk and Debian
+      is not releasing a fix.
+      https://security-tracker.debian.org/tracker/CVE-2018-20796
+
+  - id: SNYK-DEBIAN11-GLIBC-532215
+    reason: |
+      The Debian project has it marked as "unimportant" and does not appear to
+      intend to release a fix. This would require an authenticated user to
+      exploit in any case.
+      https://security-tracker.debian.org/tracker/CVE-2010-4756
+
+  - id: SNYK-DEBIAN11-GNUTLS28-2419151
+    until: 2022-08-18
+    reason: |
+      Low severity. Fixed in Debian "sid" and "bullseye".
+      https://security-tracker.debian.org/tracker/CVE-2021-4209
+
+  - id: SNYK-DEBIAN11-JBIGKIT-514977
+    reason: |
+      Ubuntu considers this to be of "negligible" severity, can only be
+      exploited for DoS, and no fix will be released.
+      https://ubuntu.com/security/CVE-2017-9937
+
+  - id: SNYK-DEBIAN11-KRB5-519904
+    reason: |
+      The Debian project labels it low severity and "Not shipped in the krb5
+      binary package". They have not released a fix for the krb5 package. This
+      would require a separate RCE to be exploied.
+      https://security-tracker.debian.org/tracker/CVE-2004-0971
+
+  - id: SNYK-DEBIAN11-KRB5-524883
+    reason: |
+      Debian considers this a non-issue and will not be releasing a fix.
+      https://security-tracker.debian.org/tracker/CVE-2018-5709
+
+
+  - id: SNYK-DEBIAN11-LIBGCRYPT20-1297892
+    until: 2022-08-18
+    reason: |
+      Low severity, Fixed in Debian "sid" and "bookworm". Temporarily accepted.
+      https://security-tracker.debian.org/tracker/CVE-2021-33560
+
+  - id: SNYK-DEBIAN11-LIBGCRYPT20-523947
+    reason: |
+      Debian considers this to an issue with applications which misuse libgcrypt
+      rather than an issue with the library itself and there is no action to
+      take within libgcrypt.
+      https://security-tracker.debian.org/tracker/CVE-2018-6829
+
+  - id: SNYK-DEBIAN11-NCURSES-1655741
+    reason: |
+      Minor issue in CURSES (which we don't use) and Debian says it has
+      "negligible security impact".
+      https://security-tracker.debian.org/tracker/CVE-2021-39537
+
+  - id: SNYK-DEBIAN11-NCURSES-2767191
+    until: 2022-08-18
+    reason: |
+      Medium issue in ncurses which we don't use. Fixed in Debian "sid" and
+      "bookworm".
+      https://security-tracker.debian.org/tracker/CVE-2022-29458
+
+  - id: SNYK-DEBIAN11-OPENLDAP-2808413
+    reason: Out of scope for our use case
+
+  - id: SNYK-DEBIAN11-OPENLDAP-521320
+    reason: Out of scope for our use case
+
+  - id: SNYK-DEBIAN11-OPENLDAP-531344
+    reason: Out of scope for our use case
+
+  - id: SNYK-DEBIAN11-OPENLDAP-531747
+    reason: Out of scope for our use case
+
+  - id: SNYK-DEBIAN11-OPENLDAP-584937
+    reason: Out of scope and disputed upstream.
+
+  - id: SNYK-DEBIAN11-OPENSSL-518334
+    reason: Debian labels this "unused" and hasn't issued a fix.
+
+  - id: SNYK-DEBIAN11-OPENSSL-525332
+    until: 2023-05-18
+    reason: |
+      Debian labels this "unimportant" and has not yet issued a fix.
+
+  - id: SNYK-DEBIAN11-PCRE2-2808697
+    until: 2022-08-18
+    reason: |
+      No severity specified, not used by Java. Fixed in Debian "sid" and
+      "bookworm".
+      https://security-tracker.debian.org/tracker/CVE-2022-1587
+
+  - id: SNYK-DEBIAN11-PCRE2-2808704
+    until: 2022-08-18
+    reason: |
+      No severity specified, not used by Java. Fixed in Debian "sid" and
+      "bookworm".
+      https://security-tracker.debian.org/tracker/CVE-2022-1586
+
+  - id: SNYK-DEBIAN11-PCRE3-523392
+    reason: Vulnerable code not present.
+
+  - id: SNYK-DEBIAN11-PCRE3-525075
+    until: 2023-05-18
+    reason: Disputed, no fix posted.
+
+  - id: SNYK-DEBIAN11-PCRE3-529298
+    until: 2022-08-18
+    reason: |
+      NVD labels this "high" severity but this library is not used by Java. No
+      fix available yet. Check back later.
+      https://security-tracker.debian.org/tracker/CVE-2017-11164
+
+  - id: SNYK-DEBIAN11-PCRE3-529490
+    until: 2023-05-18
+    reason: |
+      Debian has this labeled "unimportant" and has not yet released a fix.
+      https://security-tracker.debian.org/tracker/CVE-2017-7246
+
+  - id: SNYK-DEBIAN11-PCRE3-572353
+    reason: Not used by Java, Only an issue when UTF support disabled.
+
+  - id: SNYK-DEBIAN11-PERL-1925976
+    until: 2022-08-18
+    reason: |
+      NVD labels this "medium" severity. Not used by Java. No fix yet from
+      Debian.
+      https://security-tracker.debian.org/tracker/CVE-2020-16156
+
+  - id: SNYK-DEBIAN11-PERL-532614
+    reason: Debian labels "unimportant", no fix available, not used by Java
+
+  - id: SNYK-DEBIAN11-PYTHON39-1021152
+    until: 2022-08-18
+    reason: |
+      Debian indicates this "only affects the testsuite" and is not only used at
+      start time. No fix issued yet.
+
+  - id: SNYK-DEBIAN11-LIBPNG16-2363923
+    reason: |
+      Ubuntu says the vulnerable code is not actually shipped in the package.
+      https://ubuntu.com/security/CVE-2021-4214
+
+  - id: SNYK-DEBIAN11-LIBPNG16-529373
+    reason: |
+      Ubuntu labels this "negligible" and it is disputed upstream.
+      https://ubuntu.com/security/CVE-2019-6129
+
+  - id: SNYK-DEBIAN11-PYTHON39-1085113
+    reason: Does not apply to our use case
+
+  - id: SNYK-DEBIAN11-PYTHON39-1290158
+    reason: Does not apply to our use case
+
+  - id: SNYK-DEBIAN11-PYTHON39-1570176
+    reason: DoS-only, unlikely to apply to our use case
+
+  - id: SNYK-DEBIAN11-PYTHON39-1579738
+    reason: DoS-only, unlikely to apply to our use case
+
+  - id: SNYK-DEBIAN11-PYTHON39-2329042
+    until: 2022-08-18
+    reason: |
+      Unlikely to apply to our use case. Fixed in Debian "bookworm" and "sid".
+
+  - id: SNYK-DEBIAN11-PYTHON39-2388383
+    reason: Affected code is only called by trusted sources at start time.
+
+  - id: SNYK-DEBIAN11-LIBSEPOL-1315627
+    reason: Low severity, only applies to SELinux which we don't use.
+
+  - id: SNYK-DEBIAN11-PYTHON39-2764968
+    reason: Does not apply in our use case
+
+  - id: SNYK-DEBIAN11-PYTHONPIP-569187
+    reason: Affected code is only called by trusted sources at start time.
+
+  - id: SNYK-DEBIAN11-LIBSEPOL-1315629
+    reason: Low severity, only applies to SELinux which we don't use.
+
+  - id: SNYK-DEBIAN11-LIBSEPOL-1315635
+    reason: Low severity, only applies to SELinux which we don't use.
+
+  - id: SNYK-DEBIAN11-LIBSEPOL-1315641
+    reason: Low severity, only applies to SELinux which we don't use.
+
+  - id: SNYK-DEBIAN11-GNUTLS28-515971
+    until: 2023-05-18
+    reason: |
+      No mitigation for gnutls. No fixes from Debian. Not used by Java. Check
+      back after a while to see if this has been addressed.
+      https://security-tracker.debian.org/tracker/CVE-2011-3389
+
+  - id: SNYK-DEBIAN11-SHADOW-526940
+    reason: Does not apply in our use case
+
+  - id: SNYK-DEBIAN11-SHADOW-528840
+    reason: Low severity, does not apply to our use case
+
+  - id: SNYK-DEBIAN11-SHADOW-539870
+    reason: Debian indicates that it's compile flags obviate this issue.
+
+  - id: SNYK-DEBIAN11-SQLITE3-1569419
+    until: 2022-08-18
+    reason: |
+      Unlikely to apply to our use case. Fixed in Debian "bookworm" and "sid".
+      https://security-tracker.debian.org/tracker/CVE-2021-36690
+
+  - id: SNYK-DEBIAN11-SQLITE3-2407045
+    reason: sqlite3 is only accessed by trusted code at image build time.
+
+  - id: SNYK-DEBIAN11-SYSTEMD-1291054
+    reason: The DHCP client is not used within containers.
+
+  - id: SNYK-DEBIAN11-SYSTEMD-524969
+    reason: systemd is not used within the container.
+
+  - id: SNYK-DEBIAN11-TAR-523480
+    reason: tar is only used by trusted code at image build time.
+
+  - id: SNYK-DEBIAN11-UNZIP-2387325
+    reason: Only used at image build time. Debian says "no security impact."
+
+  - id: SNYK-DEBIAN11-UNZIP-2396444
+    until: 2022-08-18
+    reason: |
+      Medium severity, unzip is only used at image build time. No fix available
+      from Debian yet.
+      https://security-tracker.debian.org/tracker/CVE-2022-0530
+
+  - id: SNYK-DEBIAN11-UNZIP-2396445
+    until: 2022-08-18
+    reason: |
+      Medium severity, unzip is only used at image build time. No fix available
+      from Debian yet.
+      https://security-tracker.debian.org/tracker/CVE-2022-0529
+
+  - id: SNYK-DEBIAN11-UTILLINUX-2401081
+    reason: Does not apply to Debian because compiler flags disable it.
+
+  - id: SNYK-DEBIAN11-WGET-1277610
+    until: 2022-08-18
+    reason: |
+      Medium severity, no fix available from Debian.
+      https://security-tracker.debian.org/tracker/CVE-2021-31879
