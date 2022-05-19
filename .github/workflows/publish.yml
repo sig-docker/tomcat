@@ -86,7 +86,10 @@ jobs:
         run: docker scan --login --token ${{ secrets.DOCKER_SCAN_TOKEN }}
 
       - name: Scan for vulnerabilities
-        run: docker scan --json sigcorp/tomcat:${{ matrix.baseTag }}-${{ steps.shortSha.outputs.sha_short }} |python3 build/check_scan_results.py scan_config.yml -
+        run: docker scan --json sigcorp/tomcat:${{ matrix.baseTag }}-${{ steps.shortSha.outputs.sha_short }} >v.json
+
+      - name: Check vulnerability scan results
+        run: python3 build/check_scan_results.py scan_config.yml v.json
 
       # - name: Scan for vulnerabilities
       #   uses: azure/container-scan@v0
