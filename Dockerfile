@@ -1,5 +1,5 @@
 # https://hub.docker.com/_/tomcat
-FROM tomcat:8.5.68-jdk8-openjdk
+FROM tomcat:8.5-jdk8-openjdk
 
 ENV APP_LOGS=/app_logs
 
@@ -10,6 +10,8 @@ RUN rm -Rf $CATALINA_HOME/webapps.dist \
  && apt-get install -y python3-pip xtail gawk \
  && pip3 install ansible==2.10.7 lxml \
  && apt-get remove -y build-essential subversion mercurial git openssh-client \
+      'libfreetype*' curl \
+ && apt-get purge -y openssh-client \
  && apt-get clean autoclean -y \
  && apt-get autoremove -y \
  && rm -rf /var/lib/apt/lists/* /root/.cache/pip/*

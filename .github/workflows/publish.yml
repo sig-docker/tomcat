@@ -26,7 +26,18 @@ jobs:
     strategy:
       matrix:
         baseTag: ${{ fromJson(needs.prep.outputs.matrix) }}
+        exclude:
+          - baseTag: 10.1.0-jdk11-openjdk   # Critical vulnerability
     steps:
+      - name: Install docker scan plugin
+        run: |
+          mkdir -p ~/.docker/cli-plugins && \
+          curl https://github.com/docker/scan-cli-plugin/releases/latest/download/docker-scan_linux_amd64 -L -s -S -o ~/.docker/cli-plugins/docker-scan && \
+          chmod +x ~/.docker/cli-plugins/docker-scan
+
+      - name: Install pip packages
+        run: pip3 install pydantic
+
       - name: Check out code
         uses: actions/checkout@v2
         
@@ -73,9 +84,15 @@ jobs:
             -e TEST_CONF_ONLY='y'  \
             sigcorp/tomcat:${{ matrix.baseTag }}-${{ steps.shortSha.outputs.sha_short }}
 
-      # TODO: I think we want to switch to scanning inside Docker Hub instead
-      #       because that'll allow us to also monitor new vulnerabilities in
-      #       old images.          
+      - name: Log into docker scan
+        run: docker scan --login --accept-license --token ${{ secrets.DOCKER_SCAN_TOKEN }}
+
+      - name: Scan for vulnerabilities
+        run: docker scan --json sigcorp/tomcat:${{ matrix.baseTag }}-${{ steps.shortSha.outputs.sha_short }} |tee v.json
+
+      - name: Check vulnerability scan results
+        run: python3 build/check_scan_results.py scan_config.yml v.json
+
       # - name: Scan for vulnerabilities
       #   uses: azure/container-scan@v0
       #   with:
