@@ -28,14 +28,8 @@ list_all_tags () {
 }
 
 get_tomcat_tags () {
-	if [ -z "$TOMCAT_INFO" ]; then
-		>&2 echo "Fetching Tomcat info from registry."
-		TOMCAT_INFO="$(curl -s -q ${HUB_BASE}/v2/repositories/library/tomcat/)"
-	fi
-
-	for tag in $(list_all_tags tomcat |grep -E '^[^7][0-9]*\.[0-9]*\.[0-9]*-jdk(8|11)-openjdk$'); do
-		echo "$TOMCAT_INFO" | grep -q "$tag" && echo $tag
-	done
+	# This can all probably be done in awk
+	list_all_tags tomcat |grep -E '^[^7][0-9]*\.[0-9]*\.[0-9]*-jdk(8|11)-openjdk$'|tr - ' ' |awk '{print $3,$2,$1}' |sort -rV -k 2,3 |tr . ' ' |awk '{print $5,$1,$2,$3,$4}' |uniq -f 1 |awk '{print $4 "." $5 "." $1 "-" $3 "-" $2}'
 }
 
 sig_tomcat_already_pushed () {
