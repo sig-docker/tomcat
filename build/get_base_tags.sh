@@ -52,6 +52,9 @@ list_base_tags_to_build () {
 }
 
 to_build="$(list_base_tags_to_build)"
+
+>&2 echo "To build: $to_build"
+
 echo -n "[ "
 is_first=y
 for base_tag in $to_build; do	
