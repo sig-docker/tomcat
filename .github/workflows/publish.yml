@@ -57,7 +57,8 @@ jobs:
       - name: Dump debug info
         run: |
           echo "baseTag: '${{ matrix.baseTag }}'" && \
-          echo "sha_short: ${{ steps.shortSha.outputs.sha_short }}"
+          echo "sha_short: '${{ steps.shortSha.outputs.sha_short }}'" && \
+          echo "matrix: '${{ needs.prep.outputs.matrix }}'"
 
       - name: Update Dockerfile
         run: sed -ie 's/^FROM .*/FROM tomcat:${{ matrix.baseTag }}/g' Dockerfile
