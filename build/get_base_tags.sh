@@ -41,19 +41,30 @@ sig_tomcat_already_pushed () {
 	return $?
 }
 
+skip_tag () {
+	if grep -q "^$1" skip_tags; then
+		>&2 echo -n "SKIPPING: "
+		>&2 grep "^$1" skip_tags
+		return 0
+	fi
+	return 1
+}
+
 list_base_tags_to_build () {
 	git_hash=$(current_git_hash)
-	for base_tag in $(get_tomcat_tags); do	
+	for base_tag in $(get_tomcat_tags); do
+		skip_tag $base_tag && continue
 		hashed_tag="${base_tag}-${git_hash}"	
-		if ! sig_tomcat_already_pushed $hashed_tag; then
-			echo "${base_tag}"
-		fi
+		sig_tomcat_already_pushed $hashed_tag && continue
+		echo "${base_tag}"
 	done	
 }
 
 to_build="$(list_base_tags_to_build)"
 
->&2 echo "To build: $to_build"
+>&2 echo "---- To Build ----
+$to_build
+------------------"
 
 echo -n "[ "
 is_first=y

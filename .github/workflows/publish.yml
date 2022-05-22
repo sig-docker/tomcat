@@ -21,14 +21,12 @@ jobs:
     
   build:
     needs: prep
-    if: ${{ matrix.baseTag != '' }}
+    if: ${{ contains(needs.prep.outputs.matrix, '"') }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         baseTag: ${{ fromJson(needs.prep.outputs.matrix) }}
-        exclude:
-          - baseTag: 10.1.0-jdk11-openjdk   # Critical vulnerability
     steps:
       - name: Install docker scan plugin
         run: |
