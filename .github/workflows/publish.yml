@@ -21,7 +21,7 @@ jobs:
     
   build:
     needs: prep
-    if: ${{ contains(needs.prep.outputs.matrix, '"') }}
+    if: ${{ matrix.baseTag != '' }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
