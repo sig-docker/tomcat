@@ -371,3 +371,10 @@ accept:
 
   - id: SNYK-JAVA-ORGAPACHETOMCAT-2813806
     reason: This is a documentation issue, not a vulnerability.
+
+  - id: SNYK-DEBIAN11-GIT-2949145
+    reason: Git is not used at runtime
+
+  - id: SNYK-DEBIAN11-OPENSSL-2941242
+    until: 2022-10-22
+    reason: This is a low-severity issue unlikely to be relevant in our use case.
