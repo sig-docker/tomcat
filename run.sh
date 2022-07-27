@@ -11,6 +11,29 @@ die () {
 
 TOMCAT_DYNAMIC=/ansible/group_vars/all/tomcat_dynamic.yml
 
+for V in $(env |grep "^APPEND\(_\|=\)" |cut -d '=' -f 1); do
+  echo "Handling $V ..."
+  eval V=\$$V
+  FP=$(echo "$V" | head -n 1)
+  if [ -f "$FP" ]; then
+    ORG="/.sig-tomcat-originals/${FP}"
+    if [ -f "$ORG" ]; then
+      BK="/.sig-tomcat-backups/${FP}.$(date '+%Y-%m-%d_%H.%M.%S')"
+    else
+      BK="$ORG"
+    fi
+    echo "Backing up $FP to $BK"
+    mkdir -p "$(dirname $BK)" || die "Error creating backup directory"
+    cp "$FP" "$BK" || die "Error backing up append file"
+    if [ -f "$ORG" ]; then
+      echo "Restoring original from $ORG"
+      cp -f "$ORG" "$FP" || die "Error restoring original prior to append"
+    fi
+  fi
+  echo "Appending to $FP"
+  echo "$V" |tail -n +2 >> $FP
+done
+
 for F in /run.d/*; do
   echo "Sourcing $F ..."
   . $F
