@@ -378,3 +378,10 @@ accept:
   - id: SNYK-DEBIAN11-OPENSSL-2941242
     until: 2022-10-22
     reason: This is a low-severity issue unlikely to be relevant in our use case.
+
+  - id: SNYK-DEBIAN11-LIBTIRPC-2959390
+    until: 2022-10-27
+    reason: This is a DoS and there's no patch available yet.
+
+  - id: SNYK-DEBIAN11-SQLITE3-2959400
+    reason: This is a bug in sqlite3 which is not used at runtime.
