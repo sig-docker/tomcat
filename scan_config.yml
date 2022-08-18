@@ -385,3 +385,7 @@ accept:
 
   - id: SNYK-DEBIAN11-SQLITE3-2959400
     reason: This is a bug in sqlite3 which is not used at runtime.
+    
+  - id: SNYK-DEBIAN11-ZLIB-2976151
+    until: 2022-11-18
+    reason: This does not appear to be an RCE vector but should be addressed.
