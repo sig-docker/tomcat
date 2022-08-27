@@ -25,4 +25,5 @@ RUN mkdir -p /run.d \
 COPY parse_env.py run.sh /
 
 EXPOSE 8080
-CMD /run.sh
+ENTRYPOINT ["/run.sh"]
+CMD []
