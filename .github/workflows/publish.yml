@@ -68,7 +68,7 @@ jobs:
         run: |
           echo "baseTag: '${{ matrix.baseTag }}'" && \
           echo "target: '${{ matrix.target }}'" && \
-          echo "tagSuffix: '${{ steps.tagSuffix.outputs.suffix }}" && \
+          echo "tagSuffix: '${{ steps.tagSuffix.outputs.suffix }}'" && \
           echo "releaseTag: '${{ steps.releaseTag.outputs.tag }}'" && \
           echo "sha_short: '${{ steps.shortSha.outputs.sha_short }}'" && \
           echo "matrix: '${{ needs.prep.outputs.matrix }}'"
