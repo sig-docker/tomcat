@@ -61,7 +61,7 @@ RUN groupadd -r -g 10001 tomcat \
  && touch bin/setenv.sh \
  && mkdir -p logs temp webapps work conf \
  && chown -R tomcat bin logs temp webapps work conf bin/setenv.sh /ansible \
- && sed -ie 's/^tomcat_user:.*/tomcat_user: tomcat/' /ansible/group_vars/all/tomcat.yml
+ && sed -ie 's/^tomcat_user:.*/tomcat_user: tomcat/' /ansible/group_vars/all/tomcat.yml \
  && sed -ie 's/^tomcat_group:.*/tomcat_group: tomcat/' /ansible/group_vars/all/tomcat.yml
 
 USER tomcat
