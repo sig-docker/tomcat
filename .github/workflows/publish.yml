@@ -56,15 +56,20 @@ jobs:
         id: tcJdkVer
         run: echo "::set-output name=jdk_ver::$(echo '${{ matrix.baseTag }}' |cut -d - -f 2)"
 
+      - name: Set tag suffix
+        id: tagSuffix
+        run: echo "::set-output name=suffix::$(if [ '${{ matrix.target }}' == 'baseline' ]; then echo ''; else echo '-${{ matrix.target }}'; fi)"
+
       - name: Set release tag
         id: releaseTag
-        run: echo "::set-output name=tag::$(if [ '${{ matrix.target }}' == 'baseline' ]; then echo '${{ matrix.baseTag }}'; else echo '${{ matrix.baseTag }}-${{ matrix.target }}'; fi)"
+        run: echo "::set-output name=tag::$(echo '${{ matrix.baseTag }}${{ steps.tagSuffix.outputs.suffix }}')"
 
       - name: Dump debug info
         run: |
           echo "baseTag: '${{ matrix.baseTag }}'" && \
           echo "target: '${{ matrix.target }}'" && \
-          echo "releaseTag: '${{ steps.releaseTag.tag }}'" && \
+          echo "tagSuffix: '${{ steps.tagSuffix.outputs.suffix }}" && \
+          echo "releaseTag: '${{ steps.releaseTag.outputs.tag }}'" && \
           echo "sha_short: '${{ steps.shortSha.outputs.sha_short }}'" && \
           echo "matrix: '${{ needs.prep.outputs.matrix }}'"
 
@@ -85,7 +90,7 @@ jobs:
         with:
           context: .
           target: ${{ matrix.target }}
-          tags: sigcorp/tomcat:${{ steps.releaseTag.tag }}-${{ steps.shortSha.outputs.sha_short }}
+          tags: sigcorp/tomcat:${{ steps.releaseTag.outputs.tag }}-${{ steps.shortSha.outputs.sha_short }}
 
       - name: Test startup configuration
         run: |
@@ -98,13 +103,13 @@ jobs:
             -e CENSOR_ANSIBLE_OUTPUT='no' \
             -e ENABLE_SSL='yes' \
             -e TEST_CONF_ONLY='y'  \
-            sigcorp/tomcat:${{ steps.releaseTag.tag }}-${{ steps.shortSha.outputs.sha_short }}
+            sigcorp/tomcat:${{ steps.releaseTag.outputs.tag }}-${{ steps.shortSha.outputs.sha_short }}
 
       - name: Log into docker scan
         run: docker scan --login --accept-license --token ${{ secrets.DOCKER_SCAN_TOKEN }}
 
       - name: Scan for vulnerabilities
-        run: docker scan --json sigcorp/tomcat:${{ steps.releaseTag.tag }}-${{ steps.shortSha.outputs.sha_short }} |tee v.json
+        run: docker scan --json sigcorp/tomcat:${{ steps.releaseTag.outputs.tag }}-${{ steps.shortSha.outputs.sha_short }} |tee v.json
 
       - name: Check vulnerability scan results
         run: python3 build/check_scan_results.py scan_config.yml v.json
@@ -133,10 +138,10 @@ jobs:
           context: .
           push: true
           tags: |
-            public.ecr.aws/i5k1f9l3/sig-tomcat:${{ steps.releaseTag.tag }}
-            public.ecr.aws/i5k1f9l3/sig-tomcat:${{ steps.releaseTag.tag }}-${{ steps.shortSha.outputs.sha_short }}
-            public.ecr.aws/i5k1f9l3/sig-tomcat:${{ steps.releaseTag.tag }}-${{ github.run_number }}
-            public.ecr.aws/i5k1f9l3/sig-tomcat:latest-${{ steps.tcMajorVer.outputs.major_ver }}-${{ steps.tcJdkVer.outputs.jdk_ver }}
+            public.ecr.aws/i5k1f9l3/sig-tomcat:${{ steps.releaseTag.outputs.tag }}
+            public.ecr.aws/i5k1f9l3/sig-tomcat:${{ steps.releaseTag.outputs.tag }}-${{ steps.shortSha.outputs.sha_short }}
+            public.ecr.aws/i5k1f9l3/sig-tomcat:${{ steps.releaseTag.outputs.tag }}-${{ github.run_number }}
+            public.ecr.aws/i5k1f9l3/sig-tomcat:latest${{ steps.tagSuffix.outputs.suffix }}-${{ steps.tcMajorVer.outputs.major_ver }}-${{ steps.tcJdkVer.outputs.jdk_ver }}
 
       - name: Push to Docker Hub
         if: ${{ github.ref == 'refs/heads/master' }}
@@ -145,7 +150,7 @@ jobs:
           context: .
           push: true
           tags: |
-            sigcorp/tomcat:${{ steps.releaseTag.tag }}
-            sigcorp/tomcat:${{ steps.releaseTag.tag }}-${{ steps.shortSha.outputs.sha_short }}
-            sigcorp/tomcat:${{ steps.releaseTag.tag }}-${{ github.run_number }}
-            sigcorp/tomcat:latest-${{ steps.tcMajorVer.outputs.major_ver }}-${{ steps.tcJdkVer.outputs.jdk_ver }}
+            sigcorp/tomcat:${{ steps.releaseTag.outputs.tag }}
+            sigcorp/tomcat:${{ steps.releaseTag.outputs.tag }}-${{ steps.shortSha.outputs.sha_short }}
+            sigcorp/tomcat:${{ steps.releaseTag.outputs.tag }}-${{ github.run_number }}
+            sigcorp/tomcat:latest${{ steps.tagSuffix.outputs.suffix }}-${{ steps.tcMajorVer.outputs.major_ver }}-${{ steps.tcJdkVer.outputs.jdk_ver }}
