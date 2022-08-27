@@ -43,6 +43,24 @@ RUN apt-get update -y  \
  && apt-get autoremove -y \
  && rm -rf /var/lib/apt/lists/* /root/.cache/pip/*
 
-EXPOSE 8080
 ENTRYPOINT ["/usr/bin/tini", "--", "/run.sh"]
-CMD []
+
+#
+# hardened layer follows the hexops best-practice recommendations
+# https://github.com/hexops/dockerfile
+#
+
+FROM tini AS hardened
+
+RUN groupadd -r -g 10001 tomcat \
+ && useradd -rm -g tomcat -s /bin/bash -u 10000 tomcat \
+ && chgrp -R tomcat $CATALINA_HOME \
+ && chmod -R g-w $CATALINA_HOME \
+ && chmod -R g+rX $CATALINA_HOME \
+ && cd $CATALINA_HOME \
+ && touch bin/setenv.sh \
+ && mkdir -p logs temp webapps work conf \
+ && chown -R tomcat bin logs temp webapps work conf bin/setenv.sh /ansible \
+ && sed -ie 's/^tomcat_user:.*/tomcat_user: tomcat/' /ansible/group_vars/all/tomcat.yml
+
+USER tomcat

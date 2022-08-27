@@ -106,8 +106,6 @@ def go(fp):
                 [env("TOMCAT_MEMORY_ARGS"), env("TOMCAT_EXTRA_ARGS")]
             ),
             "tomcat_java_home": env("JAVA_HOME"),
-            "tomcat_user": "root",
-            "tomcat_group": "root",
             "tomcat_ssl_fqdn": env("TOMCAT_SSL_FQDN", "docker-self-signed"),
             "tomcat_ssl_org_name": "docker-self-signed",
             **ssl_opts(),
