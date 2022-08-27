@@ -1,5 +1,9 @@
 # https://hub.docker.com/_/tomcat
-FROM tomcat:8.5-jdk8-openjdk
+
+#
+# baseline release layer
+#
+FROM tomcat:jdk8-openjdk AS baseline
 
 ENV APP_LOGS=/app_logs
 
@@ -26,4 +30,19 @@ COPY parse_env.py run.sh /
 
 EXPOSE 8080
 ENTRYPOINT ["/run.sh"]
+CMD []
+
+#
+# tini uses the tini init system
+#
+FROM baseline AS tini
+
+RUN apt-get update -y  \
+ && apt-get install -y tini \
+ && apt-get clean autoclean -y \
+ && apt-get autoremove -y \
+ && rm -rf /var/lib/apt/lists/* /root/.cache/pip/*
+
+EXPOSE 8080
+ENTRYPOINT ["/usr/bin/tini", "--", "/run.sh"]
 CMD []
