@@ -58,7 +58,7 @@ jobs:
 
       - name: Set release tag
         id: releaseTag
-        run: echo "::set-output name=tag::$(if [ '${{ matrix.target }}' == 'baseline' ]; then echo '${{ matrix.baseTag }}'; else echo '${{ matrix.baseTag }}-${{ matrix.target }}')"
+        run: echo "::set-output name=tag::$(if [ '${{ matrix.target }}' == 'baseline' ]; then echo '${{ matrix.baseTag }}'; else echo '${{ matrix.baseTag }}-${{ matrix.target }}'; fi)"
 
       - name: Dump debug info
         run: |
