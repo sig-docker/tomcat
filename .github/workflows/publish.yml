@@ -142,6 +142,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
+          target: ${{ matrix.target }}
           push: true
           tags: |
             public.ecr.aws/i5k1f9l3/sig-tomcat:${{ steps.releaseTag.outputs.tag }}
@@ -154,6 +155,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
+          target: ${{ matrix.target }}
           push: true
           tags: |
             sigcorp/tomcat:${{ steps.releaseTag.outputs.tag }}
