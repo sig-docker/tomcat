@@ -92,6 +92,7 @@ cmd_exclude () {
 		[ -z "$is_first" ] && echo -n ", "
 		unset is_first
 		echo -n "{ \"baseTag\":\"${baseTag}\", \"target\":\"${target}\" }"
+		>&2 echo "EXCLUDE: { \"baseTag\":\"${baseTag}\", \"target\":\"${target}\" }"
 	done
 	echo " ]"
 }
