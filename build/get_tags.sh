@@ -55,22 +55,52 @@ list_base_tags_to_build () {
 	for base_tag in $(get_tomcat_tags); do
 		skip_tag $base_tag && continue
 		hashed_tag="${base_tag}-${git_hash}"	
-		sig_tomcat_already_pushed $hashed_tag && continue
+		# sig_tomcat_already_pushed $hashed_tag && continue
 		echo "${base_tag}"
 	done	
 }
 
-to_build="$(list_base_tags_to_build)"
+cmd_base () {
+	to_build="$(list_base_tags_to_build)"
 
->&2 echo "---- To Build ----
-$to_build
-------------------"
+	>&2 echo "---- To Build ----
+	$to_build
+	------------------"
 
-echo -n "[ "
-is_first=y
-for base_tag in $to_build; do	
-	[ -z "$is_first" ] && echo -n ", "
-	echo -n "\"${base_tag}\""
-	unset is_first
-done
-echo " ]"
+	echo -n "[ "
+	is_first=y
+	for base_tag in $to_build; do
+		[ -z "$is_first" ] && echo -n ", "
+		echo -n "\"${base_tag}\""
+		unset is_first
+	done
+	echo " ]"
+}
+
+cmd_exclude () {
+	hash=$(current_git_hash)
+	sig_tags="$(list_all_tags sigcorp/tomcat |grep -- "-${hash}$")"
+	echo -n "[ "
+	is_first=y
+	for t in $sig_tags; do
+		a=($(echo $t |tr '-' ' '))
+		unset a[-1]
+		target=${a[-1]}
+		unset a[-1]
+		baseTag=$(echo ${a[*]} | tr ' ' '-')
+
+		[ -z "$is_first" ] && echo -n ", "
+		unset is_first
+		echo -n "{ \"baseTag\":\"${baseTag}\", \"target\":\"${target}\" }"
+		>&2 echo "EXCLUDE: { \"baseTag\":\"${baseTag}\", \"target\":\"${target}\" }"
+	done
+	echo " ]"
+}
+
+if [ -z "$1" ]; then
+	echo "usage: $0 <base|exclude>"
+	exit 1
+fi
+
+CMD="$1"; shift
+cmd_${CMD} $*

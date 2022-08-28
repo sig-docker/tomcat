@@ -11,14 +11,19 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
+      excludes: ${{ steps.set-excludes.outputs.matrix }}
     steps:
       - name: Check out code
         uses: actions/checkout@v2
       
       - name: Compute which base tags to build
         id: set-matrix
-        run: echo "::set-output name=matrix::$(bash build/get_base_tags.sh)"
-    
+        run: echo "::set-output name=matrix::$(bash build/get_tags.sh base)"
+
+      - name: Compute which tags to exclude
+        id: set-excludes
+        run: echo "::set-output name=matrix::$(bash build/get_tags.sh exclude)"
+
   build:
     needs: prep
     if: ${{ contains(needs.prep.outputs.matrix, '"') }}
@@ -31,6 +36,7 @@ jobs:
           - baseline
           - tini
           - hardened
+        exclude: ${{ fromJson(needs.prep.outputs.excludes) }}
     steps:
       - name: Install docker scan plugin
         run: |
@@ -139,7 +145,7 @@ jobs:
           push: true
           tags: |
             public.ecr.aws/i5k1f9l3/sig-tomcat:${{ steps.releaseTag.outputs.tag }}
-            public.ecr.aws/i5k1f9l3/sig-tomcat:${{ steps.releaseTag.outputs.tag }}-${{ steps.shortSha.outputs.sha_short }}
+            public.ecr.aws/i5k1f9l3/sig-tomcat:${{ matrix.baseTag }}-${{ matrix.target }}-${{ steps.shortSha.outputs.sha_short }}
             public.ecr.aws/i5k1f9l3/sig-tomcat:${{ steps.releaseTag.outputs.tag }}-${{ github.run_number }}
             public.ecr.aws/i5k1f9l3/sig-tomcat:latest${{ steps.tagSuffix.outputs.suffix }}-${{ steps.tcMajorVer.outputs.major_ver }}-${{ steps.tcJdkVer.outputs.jdk_ver }}
 
@@ -151,6 +157,6 @@ jobs:
           push: true
           tags: |
             sigcorp/tomcat:${{ steps.releaseTag.outputs.tag }}
-            sigcorp/tomcat:${{ steps.releaseTag.outputs.tag }}-${{ steps.shortSha.outputs.sha_short }}
+            sigcorp/tomcat:${{ matrix.baseTag }}-${{ matrix.target }}-${{ steps.shortSha.outputs.sha_short }}
             sigcorp/tomcat:${{ steps.releaseTag.outputs.tag }}-${{ github.run_number }}
             sigcorp/tomcat:latest${{ steps.tagSuffix.outputs.suffix }}-${{ steps.tcMajorVer.outputs.major_ver }}-${{ steps.tcJdkVer.outputs.jdk_ver }}
