@@ -78,7 +78,7 @@ cmd_base () {
 }
 
 cmd_exclude () {
-	hash="ca7f32c"  # TODO: Temporary
+	hash=$(current_git_hash)
 	sig_tags="$(list_all_tags sigcorp/tomcat |grep -- "-${hash}$")"
 	echo -n "[ "
 	is_first=y
