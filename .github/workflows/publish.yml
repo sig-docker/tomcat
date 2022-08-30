@@ -14,12 +14,12 @@ jobs:
       excludes: ${{ steps.set-excludes.outputs.matrix }}
       buildCount: ${{ steps.buildCount.outputs.count }}
     steps:
+      - name: Install prerequisites
+        run: sudo snap install yq
+
       - name: Check out code
         uses: actions/checkout@v2
 
-      - name: Install prerequisites
-        run: sudo snap install yq
-      
       - name: Compute which base tags to build
         id: set-matrix
         run: echo "::set-output name=matrix::$(bash build/get_tags.sh base)"
