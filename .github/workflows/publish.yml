@@ -12,9 +12,13 @@ jobs:
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
       excludes: ${{ steps.set-excludes.outputs.matrix }}
+      buildCount: ${{ steps.buildCount.outputs.count }}
     steps:
       - name: Check out code
         uses: actions/checkout@v2
+
+      - name: Install prerequisites
+        run: apt-get install -y yq
       
       - name: Compute which base tags to build
         id: set-matrix
@@ -24,9 +28,13 @@ jobs:
         id: set-excludes
         run: echo "::set-output name=matrix::$(bash build/get_tags.sh exclude)"
 
+      - name: Compute build count
+        id: buildCount
+        run: echo "::set-output name=count::$(bash build/get_tags.sh buildcount)"
+
   build:
     needs: prep
-    if: ${{ contains(needs.prep.outputs.matrix, '"') }}
+    if: ${{ fromJson(needs.prep.outputs.buildCount) > 0 }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false

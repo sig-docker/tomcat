@@ -97,8 +97,27 @@ cmd_exclude () {
 	echo " ]"
 }
 
+cmd_buildcount () {
+	hash=$(current_git_hash)
+	sig_tags="$(list_all_tags sigcorp/tomcat |grep -- "-${hash}$")"
+	targets=$(cat .github/workflows/publish.yml |yq -r '.jobs.build.strategy.matrix.target[]')
+	targets="$targets something"
+	c=0
+	for baseTag in $(list_base_tags_to_build); do
+		for target in $targets; do
+			if echo "$sig_tags" |grep $baseTag |grep -q $target; then
+				>&2 echo "$baseTag $target found"
+			else
+				>&2 echo "$baseTag $target not found"
+				c=$((c+1))
+			fi
+		done
+	done
+	echo $c
+}
+
 if [ -z "$1" ]; then
-	echo "usage: $0 <base|exclude>"
+	echo "usage: $0 <base|exclude|buildcount>"
 	exit 1
 fi
 
