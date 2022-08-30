@@ -101,7 +101,6 @@ cmd_buildcount () {
 	hash=$(current_git_hash)
 	sig_tags="$(list_all_tags sigcorp/tomcat |grep -- "-${hash}$")"
 	targets=$(cat .github/workflows/publish.yml |yq -r '.jobs.build.strategy.matrix.target[]')
-	targets="$targets something"
 	c=0
 	for baseTag in $(list_base_tags_to_build); do
 		for target in $targets; do
@@ -113,6 +112,7 @@ cmd_buildcount () {
 			fi
 		done
 	done
+	>&2 echo "Build Count: $c"
 	echo $c
 }
 
