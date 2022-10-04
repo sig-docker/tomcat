@@ -49,6 +49,12 @@ done
 cd /ansible || die "failed to cd to /ansible"
 ansible-playbook tomcat-playbook.yml -i inventory.ini -t tomcat_conf --extra-vars "tomcat_root=$CATALINA_HOME" || die "ansible error"
 
+for V in $(env |grep "^TC_ANS_[a-zA-Z_]*" |cut -d '=' -f 1); do
+  echo "Handling $V ..."
+  eval V=\$$V
+  echo "$V" |ansible-playbook -i inventory.ini --extra-vars "tomcat_root=$CATALINA_HOME" /dev/stdin ||die "error handling Ansible playbook variable"
+done
+
 if [ -z "$TEST_CONF_ONLY" ]; then
 	cd $CATALINA_HOME || die "failed to cd to CATALINA_HOME ($CATALINA_HOME)"
  
