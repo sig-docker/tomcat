@@ -17,25 +17,19 @@ current_git_hash () {
 	git rev-parse --short HEAD || die "git error"
 }
 
-fetch_tags () {
-	url="${HUB_BASE}/v1/repositories/${1}/tags"
-	>&2 echo "Fetching tags for ${1} from registry."
-	curl -s -q "$url" || die "Error fetching tags for '$1' from $url"
-}
-
 list_all_tags () {
-	fetch_tags $1 | sed -e 's/[][]//g' -e 's/"//g' -e 's/ //g' | tr '}' '\n'  | awk -F: '{print $3}'
+	build/hub_tags.py $* || die "Error fetching tags from hub: $*"
 }
 
 get_tomcat_tags () {
 	# This can all probably be done in awk
-	list_all_tags tomcat |grep -E '^[^7][0-9]*\.[0-9]*\.[0-9]*-jdk(8|11)-openjdk$'|tr - ' ' |awk '{print $3,$2,$1}' |sort -rV -k 2,3 |tr . ' ' |awk '{print $5,$1,$2,$3,$4}' |uniq -f 1 |awk '{print $4 "." $5 "." $1 "-" $3 "-" $2}'
+	list_all_tags library tomcat |grep -E '^[^7][0-9]*\.[0-9]*\.[0-9]*-jdk(8|11)-openjdk$'|tr - ' ' |awk '{print $3,$2,$1}' |sort -rV -k 2,3 |tr . ' ' |awk '{print $5,$1,$2,$3,$4}' |uniq -f 1 |awk '{print $4 "." $5 "." $1 "-" $3 "-" $2}'
 }
 
 sig_tomcat_already_pushed () {
 	sig_tag="$1"
 	if [ -z "$ALL_SIG_TAGS" ]; then
-		ALL_SIG_TAGS="$(list_all_tags sigcorp/tomcat)"
+		ALL_SIG_TAGS="$(list_all_tags sigcorp tomcat)"
 	fi
 	echo "$ALL_SIG_TAGS" | grep -q $sig_tag
 	return $?
@@ -53,6 +47,7 @@ skip_tag () {
 list_base_tags_to_build () {
 	git_hash=$(current_git_hash)
 	for base_tag in $(get_tomcat_tags); do
+		>&2 echo "Base Tag: ${base_tag}"
 		skip_tag $base_tag && continue
 		hashed_tag="${base_tag}-${git_hash}"	
 		# sig_tomcat_already_pushed $hashed_tag && continue
@@ -64,8 +59,8 @@ cmd_base () {
 	to_build="$(list_base_tags_to_build)"
 
 	>&2 echo "---- To Build ----
-	$to_build
-	------------------"
+$to_build
+------------------"
 
 	echo -n "[ "
 	is_first=y
@@ -79,7 +74,7 @@ cmd_base () {
 
 cmd_exclude () {
 	hash=$(current_git_hash)
-	sig_tags="$(list_all_tags sigcorp/tomcat |grep -- "-${hash}$")"
+	sig_tags="$(list_all_tags sigcorp tomcat |grep -- "-${hash}$")"
 	echo -n "[ "
 	is_first=y
 	for t in $sig_tags; do
@@ -99,7 +94,7 @@ cmd_exclude () {
 
 cmd_buildcount () {
 	hash=$(current_git_hash)
-	sig_tags="$(list_all_tags sigcorp/tomcat |grep -- "-${hash}$")"
+	sig_tags="$(list_all_tags sigcorp tomcat |grep -- "-${hash}$")"
 	targets=$(cat .github/workflows/publish.yml |yq -r '.jobs.build.strategy.matrix.target[]')
 	c=0
 	for baseTag in $(list_base_tags_to_build); do
