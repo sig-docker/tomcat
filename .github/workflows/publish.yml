@@ -123,7 +123,7 @@ jobs:
         run: docker scan --login --accept-license --token ${{ secrets.DOCKER_SCAN_TOKEN }}
 
       - name: Scan for vulnerabilities
-        run: build/vuln_scan.sh
+        run: build/vuln_scan.sh sigcorp/tomcat:${{ steps.releaseTag.outputs.tag }}-${{ steps.shortSha.outputs.sha_short }}
 
       - name: Configure AWS credentials
         if: ${{ github.ref == 'refs/heads/master' }}
