@@ -34,14 +34,14 @@ accept:
     reason: Low severity and does not apply to our use case.
 
   - id: SNYK-DEBIAN11-FREETYPE-2774654
-    until: 2022-06-22
+    until: 2023-01-20
     reason: |
       This one is unlikely to apply to our use case and Ubuntu has not yet
       released a fix. Will check again later.
       https://ubuntu.com/security/CVE-2022-27406
 
   - id: SNYK-DEBIAN11-FREETYPE-2774656
-    until: 2022-06-22
+    until: 2023-01-20
     reason: |
       This one is unlikely to apply to our use case and Ubuntu has not yet
       released a fix. Will check again later.
@@ -51,7 +51,7 @@ accept:
     reason: Low severity and does not apply to our use case.
 
   - id: SNYK-DEBIAN11-FREETYPE-2774664
-    until: 2022-08-18
+    until: 2023-01-20
     reason: |
       Low severity, probably out-of-scope for our use case, and Ubuntu has not
       yet released a fix.
@@ -64,14 +64,14 @@ accept:
     reason: Only applies to multi-user Windows machines.
 
   - id: SNYK-DEBIAN11-GIT-514769
-    until: 2022-08-18
+    until: 2023-01-20
     reason: |
       Low severity, probably out-of-scope for our use case, and Ubuntu has not
       yet released a fix.
       https://ubuntu.com/security/CVE-2018-1000021
 
   - id: SNYK-DEBIAN11-DB53-2825168
-    until: 2022-08-18
+    until: 2023-01-20
     reason: |
       Medium severity, heap out-of-bounds read in SQLite3 (used by db5.3
       package). Should not be exploitable without another RCE. Fix released for
@@ -80,7 +80,7 @@ accept:
       https://security-tracker.debian.org/tracker/CVE-2019-8457
 
   - id: SNYK-DEBIAN11-EXPAT-524217
-    until: 2022-08-18
+    until: 2023-01-20
     reason: |
       Medium severity, improper entity expansion in expat. Fixed in Debian
       "bookwork" and "sid". This library is used by Python which is only used at
@@ -90,7 +90,7 @@ accept:
       https://security-tracker.debian.org/tracker/CVE-2013-0340
 
   - id: SNYK-DEBIAN11-GLIBC-2340919
-    until: 2022-08-18
+    until: 2023-01-20
     reason: |
       Medium severity, buffer over/underflow in glibc. Fixed in Debian "bookwork"
       and "sid".
@@ -135,7 +135,7 @@ accept:
       https://security-tracker.debian.org/tracker/CVE-2010-4756
 
   - id: SNYK-DEBIAN11-GNUTLS28-2419151
-    until: 2022-08-18
+    until: 2023-01-20
     reason: |
       Low severity. Fixed in Debian "sid" and "bullseye".
       https://security-tracker.debian.org/tracker/CVE-2021-4209
@@ -160,7 +160,7 @@ accept:
 
 
   - id: SNYK-DEBIAN11-LIBGCRYPT20-1297892
-    until: 2022-08-18
+    until: 2023-01-20
     reason: |
       Low severity, Fixed in Debian "sid" and "bookworm". Temporarily accepted.
       https://security-tracker.debian.org/tracker/CVE-2021-33560
@@ -179,7 +179,7 @@ accept:
       https://security-tracker.debian.org/tracker/CVE-2021-39537
 
   - id: SNYK-DEBIAN11-NCURSES-2767191
-    until: 2022-08-18
+    until: 2023-01-20
     reason: |
       Medium issue in ncurses which we don't use. Fixed in Debian "sid" and
       "bookworm".
@@ -204,19 +204,19 @@ accept:
     reason: Debian labels this "unused" and hasn't issued a fix.
 
   - id: SNYK-DEBIAN11-OPENSSL-525332
-    until: 2023-05-18
+    until: 2023-01-20
     reason: |
       Debian labels this "unimportant" and has not yet issued a fix.
 
   - id: SNYK-DEBIAN11-PCRE2-2808697
-    until: 2022-08-18
+    until: 2023-01-20
     reason: |
       No severity specified, not used by Java. Fixed in Debian "sid" and
       "bookworm".
       https://security-tracker.debian.org/tracker/CVE-2022-1587
 
   - id: SNYK-DEBIAN11-PCRE2-2808704
-    until: 2022-08-18
+    until: 2023-01-20
     reason: |
       No severity specified, not used by Java. Fixed in Debian "sid" and
       "bookworm".
@@ -226,18 +226,18 @@ accept:
     reason: Vulnerable code not present.
 
   - id: SNYK-DEBIAN11-PCRE3-525075
-    until: 2023-05-18
+    until: 2023-01-20
     reason: Disputed, no fix posted.
 
   - id: SNYK-DEBIAN11-PCRE3-529298
-    until: 2022-08-18
+    until: 2023-01-20
     reason: |
       NVD labels this "high" severity but this library is not used by Java. No
       fix available yet. Check back later.
       https://security-tracker.debian.org/tracker/CVE-2017-11164
 
   - id: SNYK-DEBIAN11-PCRE3-529490
-    until: 2023-05-18
+    until: 2023-01-20
     reason: |
       Debian has this labeled "unimportant" and has not yet released a fix.
       https://security-tracker.debian.org/tracker/CVE-2017-7246
@@ -246,7 +246,7 @@ accept:
     reason: Not used by Java, Only an issue when UTF support disabled.
 
   - id: SNYK-DEBIAN11-PERL-1925976
-    until: 2022-08-18
+    until: 2023-01-20
     reason: |
       NVD labels this "medium" severity. Not used by Java. No fix yet from
       Debian.
@@ -256,7 +256,7 @@ accept:
     reason: Debian labels "unimportant", no fix available, not used by Java
 
   - id: SNYK-DEBIAN11-PYTHON39-1021152
-    until: 2022-08-18
+    until: 2023-01-20
     reason: |
       Debian indicates this "only affects the testsuite" and is not only used at
       start time. No fix issued yet.
@@ -284,7 +284,7 @@ accept:
     reason: DoS-only, unlikely to apply to our use case
 
   - id: SNYK-DEBIAN11-PYTHON39-2329042
-    until: 2022-08-18
+    until: 2023-01-20
     reason: |
       Unlikely to apply to our use case. Fixed in Debian "bookworm" and "sid".
 
@@ -310,7 +310,7 @@ accept:
     reason: Low severity, only applies to SELinux which we don't use.
 
   - id: SNYK-DEBIAN11-GNUTLS28-515971
-    until: 2023-05-18
+    until: 2023-01-20
     reason: |
       No mitigation for gnutls. No fixes from Debian. Not used by Java. Check
       back after a while to see if this has been addressed.
@@ -326,7 +326,7 @@ accept:
     reason: Debian indicates that it's compile flags obviate this issue.
 
   - id: SNYK-DEBIAN11-SQLITE3-1569419
-    until: 2022-08-18
+    until: 2023-01-20
     reason: |
       Unlikely to apply to our use case. Fixed in Debian "bookworm" and "sid".
       https://security-tracker.debian.org/tracker/CVE-2021-36690
@@ -347,14 +347,14 @@ accept:
     reason: Only used at image build time. Debian says "no security impact."
 
   - id: SNYK-DEBIAN11-UNZIP-2396444
-    until: 2022-08-18
+    until: 2023-01-20
     reason: |
       Medium severity, unzip is only used at image build time. No fix available
       from Debian yet.
       https://security-tracker.debian.org/tracker/CVE-2022-0530
 
   - id: SNYK-DEBIAN11-UNZIP-2396445
-    until: 2022-08-18
+    until: 2023-01-20
     reason: |
       Medium severity, unzip is only used at image build time. No fix available
       from Debian yet.
@@ -364,7 +364,7 @@ accept:
     reason: Does not apply to Debian because compiler flags disable it.
 
   - id: SNYK-DEBIAN11-WGET-1277610
-    until: 2022-08-18
+    until: 2023-01-20
     reason: |
       Medium severity, no fix available from Debian.
       https://security-tracker.debian.org/tracker/CVE-2021-31879
@@ -376,16 +376,40 @@ accept:
     reason: Git is not used at runtime
 
   - id: SNYK-DEBIAN11-OPENSSL-2941242
-    until: 2022-10-22
+    until: 2023-01-20
     reason: This is a low-severity issue unlikely to be relevant in our use case.
 
   - id: SNYK-DEBIAN11-LIBTIRPC-2959390
-    until: 2022-10-27
+    until: 2023-01-20
     reason: This is a DoS and there's no patch available yet.
 
   - id: SNYK-DEBIAN11-SQLITE3-2959400
     reason: This is a bug in sqlite3 which is not used at runtime.
     
   - id: SNYK-DEBIAN11-ZLIB-2976151
-    until: 2022-11-18
+    until: 2023-01-20
     reason: This does not appear to be an RCE vector but should be addressed.
+
+  - id: SNYK-DEBIAN11-PYTHON39-3017608
+    reason: According to the CVE, "The highest threat from this vulnerability is to system availability."
+
+  - id: SNYK-DEBIAN11-PYTHON39-3032984
+    reason: This relates to the use of Python as a server, which we don't do.
+
+  - id: SNYK-PYTHON-CRYPTOGRAPHY-1070544
+    reason: This relates to the python crypto libs which we don't use, at least not for user-inputs.
+
+  - id: SNYK-PYTHON-JINJA2-1012994
+    reason: In our case, Jinja2 is only used with trusted inputs.
+
+  - id: SNYK-PYTHON-PY-1049546
+    reason: A DoS vulnerability in Python doesn't apply to our use case.
+
+  - id: SNYK-PYTHON-PYYAML-590151
+    reason: PyYAML is only used on trusted inputs at start time.
+
+  - id: SNYK-PYTHON-URLLIB3-1085966
+    reason: This package is not used at run time.
+
+  - id: SNYK-PYTHON-URLLIB3-1533435
+    reason: This package is not used at run time.

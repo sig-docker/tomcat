@@ -5,7 +5,11 @@
 #
 FROM tomcat:jdk8-openjdk AS baseline
 
-ENV APP_LOGS=/app_logs
+ENV APP_LOGS=/app_logs \
+    CATALINA_USER=root \
+    CATALINA_UID=0 \
+    CATALINA_GROUP=root \
+    CATALINA_GID=0
 
 RUN rm -Rf $CATALINA_HOME/webapps.dist \
  && mkdir -p $APP_LOGS \
@@ -52,16 +56,22 @@ ENTRYPOINT ["/usr/bin/tini", "--", "/run.sh"]
 
 FROM tini AS hardened
 
-RUN groupadd -r -g 10001 tomcat \
- && useradd -rm -g tomcat -s /bin/bash -u 10000 tomcat \
- && chgrp -R tomcat $CATALINA_HOME \
+
+ENV CATALINA_USER=tomcat \
+    CATALINA_UID=10000 \
+    CATALINA_GROUP=tomcat \
+    CATALINA_GID=10001
+
+RUN groupadd -r -g ${CATALINA_GID} ${CATALINA_GROUP} \
+ && useradd -rm -g ${CATALINA_GROUP} -s /bin/bash -u ${CATALINA_UID} ${CATALINA_USER} \
+ && chgrp -R ${CATALINA_GROUP} $CATALINA_HOME \
  && chmod -R g-w $CATALINA_HOME \
  && chmod -R g+rX $CATALINA_HOME \
  && cd $CATALINA_HOME \
  && touch bin/setenv.sh \
  && mkdir -p logs temp webapps work conf \
- && chown -R tomcat bin logs temp webapps work conf bin/setenv.sh /ansible \
- && sed -ie 's/^tomcat_user:.*/tomcat_user: tomcat/' /ansible/group_vars/all/tomcat.yml \
- && sed -ie 's/^tomcat_group:.*/tomcat_group: tomcat/' /ansible/group_vars/all/tomcat.yml
+ && chown -R ${CATALINA_USER} bin logs temp webapps work conf bin/setenv.sh /ansible \
+ && sed -ie "s/^tomcat_user:.*/tomcat_user: ${CATALINA_USER}/" /ansible/group_vars/all/tomcat.yml \
+ && sed -ie "s/^tomcat_group:.*/tomcat_group: ${CATALINA_GROUP}/" /ansible/group_vars/all/tomcat.yml
 
 USER tomcat
