@@ -111,6 +111,54 @@ Additional attributes may be added to the HTTP and HTTPS `Connector` tags in
 CONNATTR_relaxedQueryChars="|{}[]:"
 ```
 
+### Inline Ansible Playbooks
+
+Additional configuration tasks can be performed at launch time using [Ansible
+playbooks](https://docs.ansible.com/ansible/latest/user_guide/playbooks.html)
+configured in the startup environment. Any environment variable with the prefix
+`TC_ANS_` will be treated as a playbook and processed immediately after the
+Tomcat configuration playbook is run. These variables will be processed in
+lexical order.
+
+A common use-case for this feature would be to inject a keystore for SAML
+support from a secrets manager. This can be done by base64-encoding the file and
+using the [Ansible copy module](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/copy_module.html)
+to place it in the file system. To do this, set a variable (e.g.
+`TC_ANS_KEYSTORE`) to a value like:
+
+```yaml
+---
+- hosts: localhost
+  tasks:
+    - set_fact:
+        file_content: |
+          <Base64 Data>
+
+    - name: Create keystore
+      copy:
+        dest: /opt/saml_keystore.jks
+        owner: root
+        group: tomcat
+        mode: "0640"
+        content: '{{ file_content | b64decode }}'
+```
+
+## Provided Environment Variables
+
+This image adds a number of variables to those provided by the official Tomcat
+image ([described on their Docker Hub page](https://hub.docker.com/_/tomcat/)):
+
+| Var            | baseline | hardened |
+|----------------|----------|----------|
+| CATALINA_USER  | root     | tomcat   |
+| CATALINA_UID   | 0        | 10000    |
+| CATALINA_GROUP | root     | tomcat   |
+| CATALINA_GID   | 0        | 10001    |
+
+**Note:** The values for UID & GID are currently
+          [https://github.com/sig-docker/tomcat/issues/26](being discussed) and
+          may change.
+
 ## Links
 
 * [Official releases on Docker Hub](https://hub.docker.com/r/sigcorp/tomcat)
