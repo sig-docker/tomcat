@@ -25,7 +25,7 @@ RUN rm -Rf $CATALINA_HOME/webapps.dist \
  && rm -rf /var/lib/apt/lists/* /root/.cache/pip/*
 
 COPY ansible /ansible/
-RUN mkdir -p /run.d \
+RUN mkdir -p /run.d /run.after_ansible /run.before_ansible \
  && cd /ansible \
  && mkdir -p galaxy \
  && ansible-galaxy install --roles-path galaxy -r tomcat-requirements.yml --force
