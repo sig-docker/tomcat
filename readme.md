@@ -143,6 +143,12 @@ to place it in the file system. To do this, set a variable (e.g.
         content: '{{ file_content | b64decode }}'
 ```
 
+### Inline Ansible Variables
+
+Additional Ansible variables can be passed in YAML format using environment
+variables. Any environment variable with the prefix `TC_VAR_` will be put
+into a global group variable file prior to any Ansible playbooks are executed.
+
 ## Provided Environment Variables
 
 This image adds a number of variables to those provided by the official Tomcat

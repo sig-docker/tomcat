@@ -46,6 +46,12 @@ for url in $TOMCAT_DOWNLOAD_LIBS; do
   wget "$url" ||die "download error"
 done
 
+for V in $(env |grep "^TC_VAR_[a-zA-Z_]*" |cut -d '=' -f 1 |sort); do
+  echo "Storing variables from $V ..."
+  eval C=\$$V
+  echo "$C" >/ansible/group_vars/all/${V}.yml
+done
+
 for F in /run.before_ansible/*; do
   echo "Sourcing $F ..."
   . $F
