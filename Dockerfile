@@ -15,7 +15,7 @@ RUN rm -Rf $CATALINA_HOME/webapps.dist \
  && mkdir -p $APP_LOGS \
  && apt-get update -y  \
  && apt-get upgrade -y \
- && apt-get install -y python3-pip xtail gawk \
+ && apt-get install -y python3-pip xtail gawk less \
  && pip3 install ansible==2.10.7 lxml \
  && apt-get remove -y build-essential subversion mercurial git openssh-client \
       'libfreetype*' curl \
