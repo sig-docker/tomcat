@@ -22,15 +22,20 @@ RUN rm -Rf $CATALINA_HOME/webapps.dist \
  && apt-get purge -y openssh-client \
  && apt-get clean autoclean -y \
  && apt-get autoremove -y \
- && rm -rf /var/lib/apt/lists/* /root/.cache/pip/*
+ && rm -rf /var/lib/apt/lists/* /root/.cache/pip/* \
 
+# Turn /etc/localtime into a regular file
+RUN rm -f /etc/localtime \
+ && cp -f /usr/share/zoneinfo/Etc/UTC /etc/localtime \
+ && chmod 644 /etc/localtime
+
+COPY parse_env.py run.sh set_tz.sh /
 COPY ansible /ansible/
 RUN mkdir -p /run.d /run.after_ansible /run.before_ansible \
  && cd /ansible \
  && mkdir -p galaxy \
- && ansible-galaxy install --roles-path galaxy -r tomcat-requirements.yml --force
-
-COPY parse_env.py run.sh /
+ && ansible-galaxy install --roles-path galaxy -r tomcat-requirements.yml --force \
+ && chmod 0755 /set_tz.sh
 
 EXPOSE 8080
 ENTRYPOINT ["/run.sh"]
@@ -72,6 +77,8 @@ RUN groupadd -r -g ${CATALINA_GID} ${CATALINA_GROUP} \
  && mkdir -p logs temp webapps work conf \
  && chown -R ${CATALINA_USER} bin logs temp webapps work conf bin/setenv.sh /ansible \
  && sed -ie "s/^tomcat_user:.*/tomcat_user: ${CATALINA_USER}/" /ansible/group_vars/all/tomcat.yml \
- && sed -ie "s/^tomcat_group:.*/tomcat_group: ${CATALINA_GROUP}/" /ansible/group_vars/all/tomcat.yml
+ && sed -ie "s/^tomcat_group:.*/tomcat_group: ${CATALINA_GROUP}/" /ansible/group_vars/all/tomcat.yml \
+ && chgrp ${CATALINA_USER} /etc/timezone /etc/localtime /ansible/group_vars/all/timezone.yml \
+ && chmod g+rw /etc/timezone /etc/localtime /ansible/group_vars/all/timezone.yml
 
 USER tomcat

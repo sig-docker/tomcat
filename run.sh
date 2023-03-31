@@ -52,6 +52,8 @@ for V in $(env |grep "^TC_VAR_[a-zA-Z_]*" |cut -d '=' -f 1 |sort); do
   echo "$C" >/ansible/group_vars/all/${V}.yml
 done
 
+/set_tz.sh || die "Error setting timezone"
+
 for F in /run.before_ansible/*; do
   echo "Sourcing $F ..."
   . $F

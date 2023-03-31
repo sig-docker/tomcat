@@ -1,0 +1,3 @@
+# This is set to US/Eastern for legacy reasons. It's recommended that all users
+# override this by setting the TIMEZONE environment variable.
+current_timezone: US/Eastern
