@@ -13,6 +13,8 @@ with launch-time parameterization including:
 * `TOMCAT_MEMORY_ARGS` - Java memory parameters for the Tomcat process.
   * Example: `TOMCAT_MEMORY_ARGS='-Xms1024m -Xmx2048m'`
 
+* `TIMEZONE` - Timezone for the container. Default is 'UTC'. Timezones can be found [here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
+
 ### Optional Variables
 
 * `CENSOR_ANSIBLE_OUTPUT` - By default, the output of certain steps in the 
@@ -39,12 +41,11 @@ with launch-time parameterization including:
   into `$CATALINA_HOME/lib`. This is useful for adding JDBC dependencies.
 
 * `TOMCAT_EXTRA_ARGS` - Extra command-line arguments for the Tomcat process.
-  * Example: `TOMCAT_EXTRA_ARGS='-Duser.timezone=America/Chicago'`
 
 * `TOMCAT_SSL_FQDN` - If specified along with `ENABLE_SSL='yes'` this value will
   be used to set the hostname on the self-signed certificate.
   * _default_ - `docker-self-signed`
-
+  
 ### Specifying Data Sources
 
 JNDI data sources are specified using variables prefixed with `TCDS_` and 

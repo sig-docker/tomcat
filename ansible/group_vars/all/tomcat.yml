@@ -1,4 +1,3 @@
 ---
 tomcat_user_shell: /bin/bash
 tomcat_manage_logging: no
-current_timezone: US/Eastern
