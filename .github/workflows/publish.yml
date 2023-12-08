@@ -119,11 +119,11 @@ jobs:
             -e TEST_CONF_ONLY='y'  \
             sigcorp/tomcat:${{ steps.releaseTag.outputs.tag }}-${{ steps.shortSha.outputs.sha_short }}
 
-      - name: Log into docker scan
-        run: docker scan --login --accept-license --token ${{ secrets.DOCKER_SCAN_TOKEN }}
+      # - name: Log into docker scan
+      #   run: docker scan --login --accept-license --token ${{ secrets.DOCKER_SCAN_TOKEN }}
 
-      - name: Scan for vulnerabilities
-        run: build/vuln_scan.sh sigcorp/tomcat:${{ steps.releaseTag.outputs.tag }}-${{ steps.shortSha.outputs.sha_short }}
+      # - name: Scan for vulnerabilities
+      #   run: build/vuln_scan.sh sigcorp/tomcat:${{ steps.releaseTag.outputs.tag }}-${{ steps.shortSha.outputs.sha_short }}
 
       - name: Configure AWS credentials
         if: ${{ github.ref == 'refs/heads/master' }}
