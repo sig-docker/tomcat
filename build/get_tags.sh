@@ -1,16 +1,21 @@
 #! /bin/bash
 
 #
-# This script checks the list of available upstream Tomcat tags and triggers,
-# and triggers builds for any that haven't yet been build for the current
-# commit.
+# This script checks the list of available upstream Tomcat tags and triggers
+# builds for any that haven't yet been build for the current commit.
 #
 
 HUB_BASE='https://registry.hub.docker.com'
 
+DEBUG=y
+
 die () {
 	>&2 echo "ERROR: $*"
 	exit 1
+}
+
+debug () {
+	[ -n "$DEBUG" ] && >&2 echo "DEBUG: $*"
 }
 
 current_git_hash () {
@@ -23,7 +28,7 @@ list_all_tags () {
 
 get_tomcat_tags () {
 	# This can all probably be done in awk
-	list_all_tags library tomcat |grep -E '^[^7][0-9]*\.[0-9]*\.[0-9]*-jdk(8|11)-openjdk$'|tr - ' ' |awk '{print $3,$2,$1}' |sort -rV -k 2,3 |tr . ' ' |awk '{print $5,$1,$2,$3,$4}' |uniq -f 1 |awk '{print $4 "." $5 "." $1 "-" $3 "-" $2}'
+	list_all_tags library tomcat |grep -E '^[^7][0-9]*\.[0-9]*\.[0-9]*-jdk(8|11)-corretto$'|tr - ' ' |awk '{print $3,$2,$1}' |sort -rV -k 2,3 |tr . ' ' |awk '{print $5,$1,$2,$3,$4}' |uniq -f 1 |awk '{print $4 "." $5 "." $1 "-" $3 "-" $2}'
 }
 
 sig_tomcat_already_pushed () {
@@ -57,6 +62,7 @@ list_base_tags_to_build () {
 
 cmd_base () {
 	to_build="$(list_base_tags_to_build)"
+	debug "cmd_base() -> to_build: $to_build"
 
 	>&2 echo "---- To Build ----
 $to_build
@@ -112,7 +118,7 @@ cmd_buildcount () {
 }
 
 if [ -z "$1" ]; then
-	echo "usage: $0 <base|exclude|buildcount>"
+	echo "usage: [DEBUG=y] $0 <base|exclude|buildcount>"
 	exit 1
 fi
 
