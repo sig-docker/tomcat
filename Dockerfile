@@ -16,7 +16,7 @@ RUN rm -Rf $CATALINA_HOME/webapps.dist \
  && apt-get update -y  \
  && apt-get upgrade -y \
  && apt-get install -y python3-pip xtail gawk less unzip \
- && pip3 install ansible==2.10.7 lxml \
+ && pip3 install ansible==8.7.0 lxml \
  && apt-get remove -y build-essential subversion mercurial git openssh-client \
       'libfreetype*' curl \
  && apt-get purge -y openssh-client \

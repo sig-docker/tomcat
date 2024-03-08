@@ -1,4 +1,4 @@
 # ansible-galaxy install --roles-path galaxy -r requirements.yml --force
 ---
 - src: sig-ansible.tomcat
-  version: 0.11.2
+  version: 0.13.0
