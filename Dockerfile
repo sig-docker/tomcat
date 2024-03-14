@@ -3,7 +3,7 @@
 #
 # baseline release layer
 #
-FROM tomcat:jdk8-openjdk AS baseline
+FROM tomcat:jdk11-openjdk AS baseline
 
 ENV APP_LOGS=/app_logs \
     CATALINA_USER=root \
@@ -16,13 +16,13 @@ RUN rm -Rf $CATALINA_HOME/webapps.dist \
  && apt-get update -y  \
  && apt-get upgrade -y \
  && apt-get install -y python3-pip xtail gawk less unzip \
- && pip3 install ansible==8.7.0 lxml \
  && apt-get remove -y build-essential subversion mercurial git openssh-client \
       'libfreetype*' curl \
  && apt-get purge -y openssh-client \
  && apt-get clean autoclean -y \
  && apt-get autoremove -y \
  && rm -rf /var/lib/apt/lists/* /root/.cache/pip/* \
+ && update-alternatives --install /usr/bin/python python $(which python3) 10
 
 # Turn /etc/localtime into a regular file
 RUN rm -f /etc/localtime \
@@ -31,8 +31,13 @@ RUN rm -f /etc/localtime \
 
 COPY parse_env.py run.sh set_tz.sh /
 COPY ansible /ansible/
+
 RUN mkdir -p /run.d /run.after_ansible /run.before_ansible \
  && cd /ansible \
+ && pip3 install --no-cache-dir poetry \
+ && poetry export -f requirements.txt --output requirements.txt \
+ && pip install --no-cache-dir -r requirements.txt \
+ && rm -rf /root/.cache/pypoetry \
  && mkdir -p galaxy \
  && ansible-galaxy install --roles-path galaxy -r tomcat-requirements.yml --force \
  && chmod 0755 /set_tz.sh
@@ -60,7 +65,6 @@ ENTRYPOINT ["/usr/bin/tini", "--", "/run.sh"]
 #
 
 FROM tini AS hardened
-
 
 ENV CATALINA_USER=tomcat \
     CATALINA_UID=10000 \
