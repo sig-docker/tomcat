@@ -3,8 +3,7 @@
 #
 # baseline release layer
 #
-# FROM tomcat:jdk8-openjdk AS baseline
-FROM tomcat:8.5.99-jdk11-temurin AS baseline
+FROM tomcat:jdk11-openjdk AS baseline
 
 ENV APP_LOGS=/app_logs \
     CATALINA_USER=root \
