@@ -3,7 +3,8 @@
 #
 # baseline release layer
 #
-FROM tomcat:jdk8-openjdk AS baseline
+# FROM tomcat:jdk8-openjdk AS baseline
+FROM tomcat:8.5.99-jdk11-temurin AS baseline
 
 ENV APP_LOGS=/app_logs \
     CATALINA_USER=root \
@@ -35,10 +36,11 @@ COPY ansible /ansible/
 RUN mkdir -p /run.d /run.after_ansible /run.before_ansible \
  && cd /ansible \
  && pip3 install --no-cache-dir poetry \
- && poetry install -C /ansible --no-interaction --no-root \
+ && poetry export -f requirements.txt --output requirements.txt \
+ && pip install --no-cache-dir -r requirements.txt \
  && rm -rf /root/.cache/pypoetry \
  && mkdir -p galaxy \
- && poetry run ansible-galaxy -- install --roles-path galaxy -r tomcat-requirements.yml --force \
+ && ansible-galaxy install --roles-path galaxy -r tomcat-requirements.yml --force \
  && chmod 0755 /set_tz.sh
 
 EXPOSE 8080
