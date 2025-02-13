@@ -3,7 +3,7 @@
 #
 # baseline release layer
 #
-FROM tomcat:9-jdk17 AS baseline
+FROM tomcat:10-jdk17 AS baseline
 
 ENV APP_LOGS=/app_logs \
     CATALINA_USER=root \
