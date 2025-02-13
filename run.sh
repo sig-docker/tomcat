@@ -7,7 +7,7 @@ die () {
 	exit 1
 }
 
-[ -z "$TOMCAT_MEMORY_ARGS" ] && die "TOMCAT_MEMORY_ARGS not defined"
+# [ -z "$TOMCAT_MEMORY_ARGS" ] && die "TOMCAT_MEMORY_ARGS not defined"
 
 TOMCAT_DYNAMIC=/ansible/group_vars/all/tomcat_dynamic.yml
 
@@ -39,7 +39,15 @@ for F in /run.d/*; do
   . $F
 done
 
+echo "Java Home -> "$JAVA_HOME
+
+source /ansible/venv/bin/activate
+
+echo "Build tomcat.yaml"
 python3 /parse_env.py $TOMCAT_DYNAMIC
+
+echo "Contents of tomcat.yaml"
+cat $TOMCAT_DYNAMIC
 
 cd ${CATALINA_HOME}/lib
 for url in $TOMCAT_DOWNLOAD_LIBS; do
@@ -60,7 +68,9 @@ for F in /run.before_ansible/*; do
 done
 
 cd /ansible || die "failed to cd to /ansible"
-ansible-playbook tomcat-playbook.yml -i inventory.ini -t tomcat_conf --extra-vars "tomcat_root=$CATALINA_HOME" || die "ansible error"
+ls -lR /ansible/venv/bin
+
+/ansible/venv/bin/ansible-playbook tomcat-playbook.yml -i inventory.ini -t tomcat_conf --extra-vars "tomcat_root=$CATALINA_HOME" || die "ansible error"
 
 for V in $(env |grep "^TC_ANS_[a-zA-Z_]*" |cut -d '=' -f 1 |sort); do
   echo "Handling $V ..."

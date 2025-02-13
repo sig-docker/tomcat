@@ -3,7 +3,7 @@
 #
 # baseline release layer
 #
-FROM tomcat:jdk11-openjdk AS baseline
+FROM tomcat:10-jdk17 AS baseline
 
 ENV APP_LOGS=/app_logs \
     CATALINA_USER=root \
@@ -16,6 +16,7 @@ RUN rm -Rf $CATALINA_HOME/webapps.dist \
  && apt-get update -y  \
  && apt-get upgrade -y \
  && apt-get install -y python3-pip xtail gawk less unzip \
+ && apt-get install -y python3.12-venv \
  && apt-get remove -y build-essential subversion mercurial git openssh-client \
       'libfreetype*' curl \
  && apt-get purge -y openssh-client \
@@ -34,16 +35,20 @@ COPY ansible /ansible/
 
 RUN mkdir -p /run.d /run.after_ansible /run.before_ansible \
  && cd /ansible \
- && pip3 install --no-cache-dir poetry \
- && poetry export -f requirements.txt --output requirements.txt \
- && pip install --no-cache-dir -r requirements.txt \
+ && python -m venv venv \
+ && venv/bin/pip3 install --no-cache-dir ansible \
+ && venv/bin/pip3 install --no-cache-dir poetry \
+ && venv/bin/pip3 install --no-cache-dir pyyaml \
+ && venv/bin/poetry self add poetry-plugin-export \
+ && venv/bin/ansible-galaxy install --roles-path galaxy -r tomcat-requirements.yml --force \
+ && venv/bin/poetry export -f requirements.txt --output requirements.txt \
+ && /ansible/venv/bin/pip3 install --no-cache-dir -r requirements.txt \
  && rm -rf /root/.cache/pypoetry \
  && mkdir -p galaxy \
- && ansible-galaxy install --roles-path galaxy -r tomcat-requirements.yml --force \
  && chmod 0755 /set_tz.sh
 
 EXPOSE 8080
-ENTRYPOINT ["/run.sh"]
+# ENTRYPOINT ["/run.sh"]
 CMD []
 
 #
