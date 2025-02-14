@@ -68,7 +68,6 @@ for F in /run.before_ansible/*; do
 done
 
 cd /ansible || die "failed to cd to /ansible"
-ls -lR /ansible/venv/bin
 
 /ansible/venv/bin/ansible-playbook tomcat-playbook.yml -i inventory.ini -t tomcat_conf --extra-vars "tomcat_root=$CATALINA_HOME" || die "ansible error"
 
