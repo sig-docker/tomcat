@@ -45,7 +45,7 @@ RUN mkdir -p /run.d /run.after_ansible /run.before_ansible \
  && /ansible/venv/bin/pip3 install --no-cache-dir -r requirements.txt \
  && rm -rf /root/.cache/pypoetry \
  && mkdir -p galaxy \
- && chmod 0755 /set_tz.sh
+ && chmod 0755 /set_tz.sh 
 
 EXPOSE 8080
 # ENTRYPOINT ["/run.sh"]
@@ -60,6 +60,7 @@ RUN apt-get update -y  \
  && apt-get install -y tini \
  && apt-get clean autoclean -y \
  && apt-get autoremove -y \
+ && apt-get install -y gettext-base unzip \
  && rm -rf /var/lib/apt/lists/* /root/.cache/pip/*
 
 ENTRYPOINT ["/usr/bin/tini", "--", "/run.sh"]
@@ -88,6 +89,10 @@ RUN groupadd -r -g ${CATALINA_GID} ${CATALINA_GROUP} \
  && sed -ie "s/^tomcat_user:.*/tomcat_user: ${CATALINA_USER}/" /ansible/group_vars/all/tomcat.yml \
  && sed -ie "s/^tomcat_group:.*/tomcat_group: ${CATALINA_GROUP}/" /ansible/group_vars/all/tomcat.yml \
  && chgrp ${CATALINA_USER} /etc/timezone /etc/localtime /ansible/group_vars/all/timezone.yml \
- && chmod g+rw /etc/timezone /etc/localtime /ansible/group_vars/all/timezone.yml
+ && chmod g+rw /etc/timezone /etc/localtime /ansible/group_vars/all/timezone.yml 
+
+RUN  chmod 777 /opt
 
 USER tomcat
+
+# RUN /bin/bash
