@@ -95,4 +95,4 @@ RUN  chmod 777 /opt
 
 USER tomcat
 
-RUN /bin/bash
+# RUN /bin/bash
