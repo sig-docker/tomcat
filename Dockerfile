@@ -61,6 +61,7 @@ RUN apt-get update -y  \
  && apt-get clean autoclean -y \
  && apt-get autoremove -y \
  && apt-get install -y gettext-base unzip \
+ && apt-get install -y fontconfig fonts-dejavu \
  && rm -rf /var/lib/apt/lists/* /root/.cache/pip/*
 
 ENTRYPOINT ["/usr/bin/tini", "--", "/run.sh"]
